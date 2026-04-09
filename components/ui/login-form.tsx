@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,11 +10,35 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { emailValidationSchema } from "@/utils/zodValidations/formValidation";
+import toast from "react-hot-toast";
+import { login } from "@/utils/actions/userAuth.actions";
 
-export function LoginForm({
+export default function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [email, setEmail] = useState("");
+  const handleLogin = async () => {
+    // validate email
+    const validateEmail = emailValidationSchema.safeParse(email);
+
+    if (!validateEmail.success) {
+      toast.error("Please enter a valid address");
+      return;
+    }
+    // pass email to server action
+    try {
+      const formData = new FormData();
+      formData.append("email", email);
+
+      const loginUser = await login(formData);
+    } catch (error) {
+      console.error("Something went wrong. Please try again later.", error);
+    }
+  };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -29,6 +54,7 @@ export function LoginForm({
               <Field>
                 <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
+                  onChange={(e) => setEmail(e.target.value)}
                   id="email"
                   type="email"
                   placeholder="m@example.com"
@@ -36,7 +62,9 @@ export function LoginForm({
                 />
               </Field>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" onClick={handleLogin}>
+                  Login
+                </Button>
               </Field>
             </FieldGroup>
           </form>
