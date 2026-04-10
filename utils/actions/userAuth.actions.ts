@@ -10,11 +10,15 @@ export async function login(formData: FormData) {
   // check email
   const email = formData.get("email") as string;
 
-  const emailValidation = emailValidationSchema.safeParse(email);
+  // modularize this
+  const emailValidation = emailValidationSchema.safeParse({ email: email });
   if (!emailValidation.success) {
-    console.log("Invalid email address format");
+    console.log("Invalid email address format (form)");
     return;
   }
+
+  // into a function
+  // so it can be used in login-form too
 
   const { error } = await supabase.auth.signInWithOtp({
     email: email,

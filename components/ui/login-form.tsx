@@ -22,18 +22,24 @@ export default function LoginForm({
   const [email, setEmail] = useState("");
   const handleLogin = async () => {
     // validate email
-    const validateEmail = emailValidationSchema.safeParse(email);
 
-    if (!validateEmail.success) {
-      toast.error("Please enter a valid address");
-      return;
-    }
     // pass email to server action
     try {
+      const validateEmail = emailValidationSchema.safeParse({ email: email });
+      if (!validateEmail.success) {
+        toast.error("Please enter a valid address");
+        return;
+      }
       const formData = new FormData();
       formData.append("email", email);
 
       const loginUser = await login(formData);
+      if (loginUser?.error) {
+        toast.error("Something went wrong with signing in.");
+        return;
+      }
+
+      toast.success("Check your email for the login link!");
     } catch (error) {
       console.error("Something went wrong. Please try again later.", error);
     }
