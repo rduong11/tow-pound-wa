@@ -40,6 +40,8 @@ export default function LoginForm({
       }
 
       toast.success("Check your email for the login link!");
+
+      // redirect or reroute
     } catch (error) {
       console.error("Something went wrong. Please try again later.", error);
     }
