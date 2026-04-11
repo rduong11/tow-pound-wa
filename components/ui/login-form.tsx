@@ -11,9 +11,9 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { emailValidationSchema } from "@/utils/zodValidations/formValidation";
 import toast from "react-hot-toast";
 import { login } from "@/utils/actions/userAuth.actions";
+import validateEmail from "@/utils/validations/validateEmail";
 
 export default function LoginForm({
   className,
@@ -25,10 +25,10 @@ export default function LoginForm({
 
     // pass email to server action
     try {
-      const validateEmail = emailValidationSchema.safeParse({ email: email });
-      if (!validateEmail.success) {
+      const emailValidation = validateEmail(email);
+      if (!emailValidation.success) {
         toast.error("Please enter a valid address");
-        return;
+        return { error: emailValidation.error };
       }
       const formData = new FormData();
       formData.append("email", email);

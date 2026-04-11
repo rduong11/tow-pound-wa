@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
-import { emailValidationSchema } from "../zodValidations/formValidation";
+import validateEmail from "../validations/validateEmail";
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
@@ -10,19 +10,12 @@ export async function login(formData: FormData) {
   // check email
   const email = formData.get("email") as string;
 
-  // modularize this
-  const emailValidation = emailValidationSchema.safeParse({ email: email });
+  const emailValidation = validateEmail(email);
   if (!emailValidation.success) {
-    console.log("Invalid email address format (form)");
-    return;
+    return { error: emailValidation.error };
   }
 
-  // into a function
-  // so it can be used in login-form too
-
-  const { error } = await supabase.auth.signInWithOtp({
-    email: email,
-  });
+  const { error } = await supabase.auth.signInWithOtp({ email });
 
   if (error) {
     console.log("Error signing in", error);
