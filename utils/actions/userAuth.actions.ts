@@ -25,3 +25,7 @@ export async function login(formData: FormData) {
 
   // log in user
 }
+
+// TO BE IMPLEMENTED
+
+export async function verifyToken(formData: FormData) {}
