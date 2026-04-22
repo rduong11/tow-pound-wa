@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { useAppContext } from "@/context/AppContext";
+// import { useAppContext } from "@/context/AppContext";
 import { login, verifyToken } from "@/utils/actions/userAuth.actions";
 import validateEmail from "@/utils/validations/validateEmail";
 import OTPTokenForm from "@/components/ui/OTPTokenForm";
@@ -13,7 +13,7 @@ export default function AuthForm() {
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(false);
   const [otpScreen, setOtpScreen] = useState(false);
-  const { setSession } = useAppContext();
+  // const { setSession } = useAppContext();
   const router = useRouter();
 
   const handleLogin = async () => {
@@ -57,7 +57,7 @@ export default function AuthForm() {
       }
       if (otpVerification?.session) {
         toast.success("You are now logged in!");
-        setSession(otpVerification.session);
+        // setSession(otpVerification.session);
         router.push("/");
       }
     } catch (error) {

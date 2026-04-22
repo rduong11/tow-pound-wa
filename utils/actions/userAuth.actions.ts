@@ -23,9 +23,33 @@ export async function login(formData: FormData) {
     return { error: error.message };
   }
 
+  revalidatePath("/");
   // log in user
 }
 
-// TO BE IMPLEMENTED
+export async function verifyToken(formData: FormData) {
+  const supabase = await createClient();
+  const email = formData.get("email") as string;
+  const token = formData.get("token") as string;
 
-export async function verifyToken(formData: FormData) {}
+  const emailValidation = validateEmail(email);
+  if (!emailValidation.success) {
+    return { error: emailValidation.error };
+  }
+
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.verifyOtp({
+    email: email,
+    token: token.trim(),
+    type: "email",
+  });
+
+  if (error) {
+    console.log("Error verifying OTP", error);
+    return { error: error.message };
+  }
+
+  return { error: null, session };
+}
