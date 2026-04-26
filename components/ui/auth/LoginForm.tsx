@@ -1,14 +1,15 @@
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/shadcn/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/shadcn/card";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/shadcn/field";
+import { Input } from "@/components/ui/shadcn/input";
+import { Spinner } from "../shadcn/spinner";
 
 type LoginFormProps = {
   email: string;
@@ -47,7 +48,7 @@ export default function LoginForm({
             </Field>
             <Field>
               <Button type="button" onClick={onSubmit} disabled={loading}>
-                {loading ? "Signing in..." : "Log in"}
+                {loading ? <Spinner /> : "Log in"}
               </Button>
             </Field>
           </FieldGroup>

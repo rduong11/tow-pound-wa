@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 // import { useAppContext } from "@/context/AppContext";
 import { login, verifyToken } from "@/utils/actions/userAuth.actions";
 import validateEmail from "@/utils/validations/validateEmail";
-import OTPTokenForm from "@/components/ui/OTPTokenForm";
+import OTPTokenForm from "@/components/ui/auth/OTPTokenForm";
 import LoginForm from "./LoginForm";
 
 export default function AuthForm() {
@@ -58,7 +58,7 @@ export default function AuthForm() {
       if (otpVerification?.session) {
         toast.success("You are now logged in!");
         // setSession(otpVerification.session);
-        router.push("/");
+        router.push("/dashboard");
       }
     } catch (error) {
       console.error("Error verifying token:", error);

@@ -1,13 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/shadcn/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+} from "@/components/ui/shadcn/card";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/shadcn/field";
+import { Input } from "@/components/ui/shadcn/input";
+import { Spinner } from "../shadcn/spinner";
 
 type OTPTokenFormProps = {
   token: string;
@@ -46,7 +47,7 @@ export default function OTPTokenForm({
             </Field>
             <Field>
               <Button type="button" onClick={onSubmit} disabled={loading}>
-                {loading ? "Verifying..." : "Verify"}
+                <Spinner>{loading ? <Spinner /> : "Verify"}</Spinner>
               </Button>
             </Field>
           </FieldGroup>
