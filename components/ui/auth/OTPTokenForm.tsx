@@ -46,7 +46,12 @@ export default function OTPTokenForm({
               />
             </Field>
             <Field>
-              <Button type="button" onClick={onSubmit} disabled={loading}>
+              <Button
+                type="button"
+                onClick={onSubmit}
+                disabled={loading}
+                className="hover:bg-chart-2 hover:text-primary-foreground transition-colors duration-200"
+              >
                 <Spinner>{loading ? <Spinner /> : "Verify"}</Spinner>
               </Button>
             </Field>

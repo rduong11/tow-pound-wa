@@ -47,7 +47,12 @@ export default function LoginForm({
               />
             </Field>
             <Field>
-              <Button type="button" onClick={onSubmit} disabled={loading}>
+              <Button
+                type="button"
+                onClick={onSubmit}
+                disabled={loading}
+                className="hover:bg-chart-2 hover:text-primary-foreground transition-colors duration-200"
+              >
                 {loading ? <Spinner /> : "Log in"}
               </Button>
             </Field>
