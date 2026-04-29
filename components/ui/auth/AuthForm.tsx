@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 // import { useAppContext } from "@/context/AppContext";
-import { login, verifyToken } from "@/utils/actions/userAuth.actions";
+import { login, verifyToken } from "@/utils/actions/auth";
 import validateEmail from "@/utils/validations/validateEmail";
 import OTPTokenForm from "@/components/ui/auth/OTPTokenForm";
 import LoginForm from "./LoginForm";

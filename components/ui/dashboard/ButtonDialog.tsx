@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/shadcn/button";
 import {
   Dialog,
@@ -14,7 +15,28 @@ import { Input } from "@/components/ui/shadcn/input";
 import { Label } from "@/components/ui/shadcn/label";
 import { CirclePlus } from "lucide-react";
 
-export default function ButtonDialog() {
+type VehicleFormData = {
+  plateNumber: string;
+  make: string;
+  model: string;
+  year: number;
+  color?: string;
+};
+
+type ButtonDialogProps = VehicleFormData & {
+  onChange: (field: keyof VehicleFormData, value: string | number) => void;
+  onSubmit: (data: VehicleFormData) => void;
+};
+
+export default function ButtonDialog({
+  plateNumber,
+  make,
+  model,
+  year,
+  color,
+  onChange,
+  onSubmit,
+}: ButtonDialogProps) {
   return (
     <div>
       <Dialog>
@@ -24,44 +46,67 @@ export default function ButtonDialog() {
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-sm">
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              onSubmit({ plateNumber, make, model, year, color });
+            }}
+          >
             <DialogHeader>
               <DialogTitle>Vehicle Information</DialogTitle>
               <DialogDescription>
-                Enter the vehicle's information below.
+                Enter the vehicle&aposs information below.
               </DialogDescription>
             </DialogHeader>
             <FieldGroup>
               <Field>
-                <Label htmlFor="vehicle-plate">Vehicle Plate Number</Label>
+                <Label htmlFor="plate-number">Vehicle Plate Number</Label>
                 <Input
                   id="plate-number"
                   name="plate-number"
                   placeholder="AB12345"
+                  value={plateNumber}
+                  onChange={(e) => onChange("plateNumber", e.target.value)}
                 />
               </Field>
               <Field>
-                <Label htmlFor="vehicle-model">Vehicle Model</Label>
-                <Input
-                  id="vehicle-model-name"
-                  name="vehicle-model-name"
-                  placeholder="Honda"
-                />
-              </Field>
-              <Field>
-                <Label htmlFor="vehicle-make">Vehicle Make</Label>
+                <Label htmlFor="vehicle-make-name">Vehicle Make</Label>
                 <Input
                   id="vehicle-make-name"
                   name="vehicle-make-name"
-                  placeholder="Accord"
+                  placeholder="Honda"
+                  value={make}
+                  onChange={(e) => onChange("make", e.target.value)}
                 />
               </Field>
               <Field>
-                <Label htmlFor="vehicle-year">Vehicle Year</Label>
+                <Label htmlFor="vehicle-model-name">Vehicle Model</Label>
+                <Input
+                  id="vehicle-model-name"
+                  name="vehicle-model-name"
+                  placeholder="Accord"
+                  value={model}
+                  onChange={(e) => onChange("model", e.target.value)}
+                />
+              </Field>
+              <Field>
+                <Label htmlFor="vehicle-year-num">Vehicle Year</Label>
                 <Input
                   id="vehicle-year-num"
                   name="vehicle-year-num"
                   placeholder="2008"
+                  value={year}
+                  onChange={(e) => onChange("year", Number(e.target.value))}
+                />
+              </Field>
+              <Field>
+                <Label htmlFor="vehicle-color">Vehicle Color</Label>
+                <Input
+                  id="vehicle-color"
+                  name="vehicle-color"
+                  placeholder="Grey"
+                  value={color ?? ""}
+                  onChange={(e) => onChange("color", e.target.value)}
                 />
               </Field>
             </FieldGroup>

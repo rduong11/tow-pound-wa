@@ -1,4 +1,3 @@
-"use client";
 import ButtonDialog from "@/components/ui/dashboard/ButtonDialog";
 
 export default function DashboardPage() {
