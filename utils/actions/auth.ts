@@ -3,12 +3,13 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
 import validateEmail from "../validations/validateEmail";
+import { LoginFormData, OTPFormData } from "@/app/(clerk)/login/schema";
 
-export async function login(formData: FormData) {
+export async function login(data: LoginFormData) {
   const supabase = await createClient();
 
   // check email
-  const email = formData.get("email") as string;
+  const { email } = data;
 
   const emailValidation = validateEmail(email);
   if (!emailValidation.success) {
@@ -19,18 +20,16 @@ export async function login(formData: FormData) {
 
   if (error) {
     console.log("Error signing in", error);
-    revalidatePath("/");
     return { error: error.message };
   }
 
-  revalidatePath("/");
+  revalidatePath("/dashboard");
   // log in user
 }
 
-export async function verifyToken(formData: FormData) {
+export async function verifyToken(data: OTPFormData) {
   const supabase = await createClient();
-  const email = formData.get("email") as string;
-  const token = formData.get("token") as string;
+  const { email, token } = data;
 
   const emailValidation = validateEmail(email);
   if (!emailValidation.success) {

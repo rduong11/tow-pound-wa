@@ -25,9 +25,7 @@ export default function AuthForm() {
         return;
       }
 
-      const formData = new FormData();
-      formData.append("email", email);
-      const loginUser = await login(formData);
+      const loginUser = await login({ email });
 
       if (loginUser?.error) {
         toast.error("Something went wrong with signing in.");
@@ -46,10 +44,7 @@ export default function AuthForm() {
   const handleVerifyToken = async () => {
     try {
       setLoading(true);
-      const formData = new FormData();
-      formData.append("email", email);
-      formData.append("token", token);
-      const otpVerification = await verifyToken(formData);
+      const otpVerification = await verifyToken({ email, token });
 
       if (otpVerification?.error) {
         toast.error("Invalid code. Please try again.");
