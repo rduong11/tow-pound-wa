@@ -21,6 +21,7 @@ type VehicleFormData = {
   model: string;
   year: number;
   color?: string;
+  location: string;
 };
 
 type ButtonDialogProps = VehicleFormData & {
@@ -34,6 +35,7 @@ export default function ButtonDialog({
   model,
   year,
   color,
+  location,
   onChange,
   onSubmit,
 }: ButtonDialogProps) {
@@ -49,7 +51,7 @@ export default function ButtonDialog({
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              onSubmit({ plateNumber, make, model, year, color });
+              onSubmit({ plateNumber, make, model, year, color, location });
             }}
           >
             <DialogHeader>
@@ -106,6 +108,16 @@ export default function ButtonDialog({
                   name="vehicle-color"
                   placeholder="Grey"
                   value={color ?? ""}
+                  onChange={(e) => onChange("color", e.target.value)}
+                />
+              </Field>
+              <Field>
+                <Label htmlFor="vehicle-location">Vehicle Location</Label>
+                <Input
+                  id="vehicle-Location"
+                  name="vehicle-Location"
+                  placeholder="500 E Wacker Dr."
+                  value={location}
                   onChange={(e) => onChange("color", e.target.value)}
                 />
               </Field>
