@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 // import { useAppContext } from "@/context/AppContext";
 import { login, verifyToken } from "@/utils/actions/auth";
-import validateEmail from "@/utils/validations/validateEmail";
+import { loginSchema } from "@/utils/schemas/auth.schema";
 import OTPTokenForm from "@/components/ui/auth/OTPTokenForm";
 import LoginForm from "./LoginForm";
 
@@ -19,9 +19,10 @@ export default function AuthForm() {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      const emailValidation = validateEmail(email);
-      if (!emailValidation.success) {
-        toast.error("Please enter a valid address");
+
+      const result = loginSchema.safeParse({ email });
+      if (!result.success) {
+        toast.error(result.error.issues[0].message);
         return;
       }
 
@@ -47,7 +48,7 @@ export default function AuthForm() {
       const otpVerification = await verifyToken({ email, token });
 
       if (otpVerification?.error) {
-        toast.error("Invalid code. Please try again.");
+        toast.error(otpVerification.error);
         return;
       }
       if (otpVerification?.session) {

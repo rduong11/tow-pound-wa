@@ -2,19 +2,22 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
-import validateEmail from "../validations/validateEmail";
-import { LoginFormData, OTPFormData } from "@/app/(clerk)/login/schema";
+import {
+  loginSchema,
+  otpSchema,
+  LoginFormData,
+  OTPFormData,
+} from "@/utils/schemas/auth.schema";
 
 export async function login(data: LoginFormData) {
   const supabase = await createClient();
 
-  // check email
-  const { email } = data;
-
-  const emailValidation = validateEmail(email);
-  if (!emailValidation.success) {
-    return { error: emailValidation.error };
+  const result = loginSchema.safeParse(data);
+  if (!result.success) {
+    return { error: result.error.issues[0].message };
   }
+
+  const { email } = result.data;
 
   const { error } = await supabase.auth.signInWithOtp({ email });
 
@@ -24,23 +27,23 @@ export async function login(data: LoginFormData) {
   }
 
   revalidatePath("/dashboard");
-  // log in user
 }
 
 export async function verifyToken(data: OTPFormData) {
   const supabase = await createClient();
-  const { email, token } = data;
 
-  const emailValidation = validateEmail(email);
-  if (!emailValidation.success) {
-    return { error: emailValidation.error };
+  const result = otpSchema.safeParse(data);
+  if (!result.success) {
+    return { error: result.error.issues[0].message };
   }
+
+  const { email, token } = result.data;
 
   const {
     data: { session },
     error,
   } = await supabase.auth.verifyOtp({
-    email: email,
+    email,
     token: token.trim(),
     type: "email",
   });

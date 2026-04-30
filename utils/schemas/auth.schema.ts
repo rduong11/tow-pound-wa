@@ -4,7 +4,9 @@ export const loginSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Email is required" })
-    .email({ message: "Please enter a valid email address" }),
+    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {
+      message: "Please enter a valid email address",
+    }),
 });
 
 export const otpSchema = z.object({
@@ -17,7 +19,7 @@ export const otpSchema = z.object({
   token: z
     .string()
     .min(1, { message: "Code is required" })
-    .length(6, { message: "Code must be 6 digits" })
+    .length(8, { message: "Code must be 8 digits" })
     .regex(/^\d+$/, { message: "Code must contain numbers only" }),
 });
 
