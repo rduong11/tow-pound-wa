@@ -32,6 +32,8 @@ type ButtonDialogProps = Omit<VehicleFormData, "location"> & {
   ) => void;
 };
 
+type FormErrors = Partial<Record<keyof VehicleFormData, string>>;
+
 export default function ButtonDialog({
   plateNumber,
   make,
@@ -42,11 +44,13 @@ export default function ButtonDialog({
 }: ButtonDialogProps) {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<Location | "">("");
+  const [errors, setErrors] = useState<FormErrors>({});
 
-  const handleEntrySubmission = async (e: React.FormEvent) => {
+  const handleEntrySubmission = async (e: React.SubmitEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
+      setErrors({});
 
       const result = vehicleSchema.safeParse({
         plateNumber,
@@ -56,8 +60,17 @@ export default function ButtonDialog({
         color,
         location,
       });
+
       if (!result.success) {
-        toast.error(result.error.issues[0].message);
+        const fieldErrors = result.error.flatten().fieldErrors;
+        setErrors({
+          plateNumber: fieldErrors.plateNumber?.[0],
+          make: fieldErrors.make?.[0],
+          model: fieldErrors.model?.[0],
+          year: fieldErrors.year?.[0],
+          color: fieldErrors.color?.[0],
+          location: fieldErrors.location?.[0],
+        });
         return;
       }
 
@@ -104,6 +117,9 @@ export default function ButtonDialog({
                     onChange("plateNumber", e.target.value.toUpperCase())
                   }
                 />
+                {errors.plateNumber && (
+                  <p className="text-sm text-red-500">{errors.plateNumber}</p>
+                )}
               </Field>
               <Field>
                 <Label htmlFor="vehicle-make-name">Vehicle Make</Label>
@@ -114,6 +130,9 @@ export default function ButtonDialog({
                   value={make}
                   onChange={(e) => onChange("make", e.target.value)}
                 />
+                {errors.make && (
+                  <p className="text-sm text-red-500">{errors.make}</p>
+                )}
               </Field>
               <Field>
                 <Label htmlFor="vehicle-model-name">Vehicle Model</Label>
@@ -124,6 +143,9 @@ export default function ButtonDialog({
                   value={model}
                   onChange={(e) => onChange("model", e.target.value)}
                 />
+                {errors.model && (
+                  <p className="text-sm text-red-500">{errors.model}</p>
+                )}
               </Field>
               <Field>
                 <Label htmlFor="vehicle-year-num">Vehicle Year</Label>
@@ -134,6 +156,9 @@ export default function ButtonDialog({
                   value={year}
                   onChange={(e) => onChange("year", Number(e.target.value))}
                 />
+                {errors.year && (
+                  <p className="text-sm text-red-500">{errors.year}</p>
+                )}
               </Field>
               <Field>
                 <Label htmlFor="vehicle-color">Vehicle Color</Label>
@@ -144,6 +169,9 @@ export default function ButtonDialog({
                   value={color ?? ""}
                   onChange={(e) => onChange("color", e.target.value)}
                 />
+                {errors.color && (
+                  <p className="text-sm text-red-500">{errors.color}</p>
+                )}
               </Field>
               <Field>
                 <Label htmlFor="vehicle-location">Tow Pound Location</Label>
@@ -162,6 +190,9 @@ export default function ButtonDialog({
                     </option>
                   ))}
                 </select>
+                {errors.location && (
+                  <p className="text-sm text-red-500">{errors.location}</p>
+                )}
               </Field>
             </FieldGroup>
             <DialogFooter>
