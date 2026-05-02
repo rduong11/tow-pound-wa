@@ -6,7 +6,7 @@ export default function DashboardPage() {
   const [plateNumber, setPlateNumber] = useState("");
   const [make, setMake] = useState("");
   const [model, setModel] = useState("");
-  const [year, setYear] = useState(0);
+  const [year, setYear] = useState("");
   const [color, setColor] = useState("");
 
   const handleChange = (field: string, value: string | number) => {
@@ -14,8 +14,6 @@ export default function DashboardPage() {
       plateNumber: (val) => setPlateNumber(val as string),
       make: (val) => setMake(val as string),
       model: (val) => setModel(val as string),
-      year: (val) => setYear(val as number),
-      color: (val) => setColor(val as string),
     };
     setters[field]?.(value);
   };
@@ -27,7 +25,6 @@ export default function DashboardPage() {
         plateNumber={plateNumber}
         make={make}
         model={model}
-        year={year}
         onChange={handleChange}
       />
     </div>

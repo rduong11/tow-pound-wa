@@ -36,26 +36,37 @@ import { VEHICLE_COLORS } from "@/utils/constants/vehicleColors";
 type Location = (typeof TOW_POUND_LOCATIONS)[number];
 type Color = (typeof VEHICLE_COLORS)[number];
 
-type ButtonDialogProps = Omit<VehicleFormData, "location" | "color"> & {
+type ButtonDialogProps = Omit<
+  VehicleFormData,
+  "location" | "color" | "year"
+> & {
   onChange: (
-    field: keyof Omit<VehicleFormData, "location" | "color">,
+    field: keyof Omit<VehicleFormData, "location" | "color" | "year">,
     value: string | number
   ) => void;
 };
-
 type FormErrors = Partial<Record<keyof VehicleFormData, string>>;
 
 export default function ButtonDialog({
   plateNumber,
   make,
   model,
-  year,
   onChange,
 }: ButtonDialogProps) {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<Location | "">("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [color, setColor] = useState<Color | "">("");
+  const [year, setYear] = useState("");
+  const validateField = (
+    field: keyof VehicleFormData,
+    value: string | number
+  ) => {
+    const result = vehicleSchema.shape[field].safeParse(value);
+    if (result.success) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
 
   const handleEntrySubmission = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -67,7 +78,7 @@ export default function ButtonDialog({
         plateNumber,
         make,
         model,
-        year,
+        year: Number(year),
         color,
         location,
       });
@@ -124,12 +135,15 @@ export default function ButtonDialog({
                   name="plate-number"
                   placeholder="AB12345"
                   value={plateNumber}
-                  onChange={(e) =>
-                    onChange("plateNumber", e.target.value.toUpperCase())
-                  }
+                  onChange={(e) => {
+                    onChange("plateNumber", e.target.value.toUpperCase());
+                    validateField("plateNumber", e.target.value.toUpperCase());
+                  }}
                 />
                 {errors.plateNumber && (
-                  <p className="text-sm text-red-500">{errors.plateNumber}</p>
+                  <p className="text-sm text-red-500">
+                    {errors.plateNumber ?? ""}
+                  </p>
                 )}
               </Field>
               <Field>
@@ -139,10 +153,13 @@ export default function ButtonDialog({
                   name="vehicle-make-name"
                   placeholder="Honda"
                   value={make}
-                  onChange={(e) => onChange("make", e.target.value)}
+                  onChange={(e) => {
+                    onChange("make", e.target.value);
+                    validateField("make", e.target.value);
+                  }}
                 />
                 {errors.make && (
-                  <p className="text-sm text-red-500">{errors.make}</p>
+                  <p className="text-sm text-red-500">{errors.make ?? ""}</p>
                 )}
               </Field>
               <Field>
@@ -152,10 +169,13 @@ export default function ButtonDialog({
                   name="vehicle-model-name"
                   placeholder="Accord"
                   value={model}
-                  onChange={(e) => onChange("model", e.target.value)}
+                  onChange={(e) => {
+                    onChange("model", e.target.value);
+                    validateField("model", e.target.value);
+                  }}
                 />
                 {errors.model && (
-                  <p className="text-sm text-red-500">{errors.model}</p>
+                  <p className="text-sm text-red-500">{errors.model ?? ""}</p>
                 )}
               </Field>
               <Field>
@@ -165,17 +185,23 @@ export default function ButtonDialog({
                   name="vehicle-year-num"
                   placeholder="2008"
                   value={year}
-                  onChange={(e) => onChange("year", Number(e.target.value))}
+                  onChange={(e) => {
+                    setYear(e.target.value);
+                    validateField("year", Number(e.target.value));
+                  }}
                 />
                 {errors.year && (
-                  <p className="text-sm text-red-500">{errors.year}</p>
+                  <p className="text-sm text-red-500">{errors.year ?? ""}</p>
                 )}
               </Field>
               <Field>
                 <Label htmlFor="vehicle-color">Vehicle Color</Label>
                 <Select
                   value={color}
-                  onValueChange={(val) => setColor(val as Color)}
+                  onValueChange={(val) => {
+                    setColor(val as Color);
+                    validateField("color", val);
+                  }}
                 >
                   <SelectTrigger id="vehicle-color" className="w-full">
                     <SelectValue placeholder="Select a color" />
@@ -192,14 +218,17 @@ export default function ButtonDialog({
                   </SelectContent>
                 </Select>
                 {errors.color && (
-                  <p className="text-sm text-red-500">{errors.color}</p>
+                  <p className="text-sm text-red-500">{errors.color ?? ""}</p>
                 )}
               </Field>
               <Field className="pb-4">
                 <Label htmlFor="vehicle-location">Tow Pound Location</Label>
                 <Select
                   value={location}
-                  onValueChange={(val) => setLocation(val as Location)}
+                  onValueChange={(val) => {
+                    setLocation(val as Location);
+                    validateField("location", val);
+                  }}
                 >
                   <SelectTrigger id="vehicle-location" className="w-full">
                     <SelectValue placeholder="Select a location" />
@@ -216,7 +245,9 @@ export default function ButtonDialog({
                   </SelectContent>
                 </Select>
                 {errors.location && (
-                  <p className="text-sm text-red-500">{errors.location}</p>
+                  <p className="text-sm text-red-500">
+                    {errors.location ?? ""}
+                  </p>
                 )}
               </Field>
             </FieldGroup>
