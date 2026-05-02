@@ -22,13 +22,22 @@ import {
 import { CirclePlus } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../shadcn/select";
 
 type Location = (typeof TOW_POUND_LOCATIONS)[number];
 
 type ButtonDialogProps = Omit<VehicleFormData, "location"> & {
   onChange: (
     field: keyof Omit<VehicleFormData, "location">,
-    value: string | number,
+    value: string | number
   ) => void;
 };
 
@@ -105,8 +114,8 @@ export default function ButtonDialog({
                 Enter the vehicle&apos;s information below.
               </DialogDescription>
             </DialogHeader>
-            <FieldGroup>
-              <Field>
+            <FieldGroup className="pt-4 pb-4">
+              <Field className="pt-2">
                 <Label htmlFor="plate-number">Vehicle Plate Number</Label>
                 <Input
                   id="plate-number"
@@ -173,23 +182,26 @@ export default function ButtonDialog({
                   <p className="text-sm text-red-500">{errors.color}</p>
                 )}
               </Field>
-              <Field>
+              <Field className="pb-4">
                 <Label htmlFor="vehicle-location">Tow Pound Location</Label>
-                <select
-                  id="vehicle-location"
-                  name="vehicle-location"
+                <Select
                   value={location}
-                  onChange={(e) => setLocation(e.target.value as Location)}
+                  onValueChange={(val) => setLocation(val as Location)}
                 >
-                  <option value="" disabled>
-                    Select a location
-                  </option>
-                  {TOW_POUND_LOCATIONS.map((loc) => (
-                    <option key={loc} value={loc}>
-                      {loc}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger id="vehicle-location" className="w-full">
+                    <SelectValue placeholder="Select a location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Chicago Pound Locations</SelectLabel>
+                      {TOW_POUND_LOCATIONS.map((loc) => (
+                        <SelectItem key={loc} value={loc}>
+                          {loc}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
                 {errors.location && (
                   <p className="text-sm text-red-500">{errors.location}</p>
                 )}
