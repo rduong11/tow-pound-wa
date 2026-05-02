@@ -28,7 +28,6 @@ export default function DashboardPage() {
         make={make}
         model={model}
         year={year}
-        color={color}
         onChange={handleChange}
       />
     </div>

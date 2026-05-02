@@ -31,12 +31,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../shadcn/select";
+import { VEHICLE_COLORS } from "@/utils/constants/vehicleColors";
 
 type Location = (typeof TOW_POUND_LOCATIONS)[number];
+type Color = (typeof VEHICLE_COLORS)[number];
 
-type ButtonDialogProps = Omit<VehicleFormData, "location"> & {
+type ButtonDialogProps = Omit<VehicleFormData, "location" | "color"> & {
   onChange: (
-    field: keyof Omit<VehicleFormData, "location">,
+    field: keyof Omit<VehicleFormData, "location" | "color">,
     value: string | number
   ) => void;
 };
@@ -48,12 +50,12 @@ export default function ButtonDialog({
   make,
   model,
   year,
-  color,
   onChange,
 }: ButtonDialogProps) {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<Location | "">("");
   const [errors, setErrors] = useState<FormErrors>({});
+  const [color, setColor] = useState<Color | "">("");
 
   const handleEntrySubmission = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -171,13 +173,24 @@ export default function ButtonDialog({
               </Field>
               <Field>
                 <Label htmlFor="vehicle-color">Vehicle Color</Label>
-                <Input
-                  id="vehicle-color"
-                  name="vehicle-color"
-                  placeholder="Grey"
-                  value={color ?? ""}
-                  onChange={(e) => onChange("color", e.target.value)}
-                />
+                <Select
+                  value={color}
+                  onValueChange={(val) => setColor(val as Color)}
+                >
+                  <SelectTrigger id="vehicle-color" className="w-full">
+                    <SelectValue placeholder="Select a color" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Colors</SelectLabel>
+                      {VEHICLE_COLORS.map((col) => (
+                        <SelectItem key={col} value={col}>
+                          {col}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
                 {errors.color && (
                   <p className="text-sm text-red-500">{errors.color}</p>
                 )}

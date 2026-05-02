@@ -1,0 +1,17 @@
+export const VEHICLE_COLORS = [
+  "Black",
+  "White",
+  "Silver",
+  "Gray",
+  "Red",
+  "Blue",
+  "Brown",
+  "Green",
+  "Yellow",
+  "Orange",
+  "Gold",
+  "Beige",
+  "Purple",
+  "Maroon",
+  "Other",
+] as const;
