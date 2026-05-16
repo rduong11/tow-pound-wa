@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { TOW_POUND_LOCATIONS } from "@/utils/constants/poundLocations";
+import { VEHICLE_COLORS } from "../constants/vehicleColors";
 
 export const plateSchema = z.object({
   plateNumber: z
@@ -19,7 +20,7 @@ export const vehicleSchema = z.object({
     .number()
     .min(1886, { message: "Year is not valid" })
     .max(new Date().getFullYear(), { message: "Year cannot be in the future" }),
-  color: z.string().optional(),
+  color: z.enum(VEHICLE_COLORS, { message: "Please select a color" }),
   location: z.enum(TOW_POUND_LOCATIONS, {
     message: "Please select a valid location",
   }),
