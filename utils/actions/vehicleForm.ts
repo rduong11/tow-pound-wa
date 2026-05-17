@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { VehicleFormData, vehicleSchema } from "../schemas/vehicleForm.schema";
 import { createClient } from "../supabase/server";
 
@@ -22,5 +23,6 @@ export async function submitVehicleEntry(data: VehicleFormData) {
     return { error: error.message };
   }
 
+  revalidatePath("/dashboard");
   return { error: null };
 }
