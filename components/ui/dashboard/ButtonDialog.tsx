@@ -144,132 +144,141 @@ export default function ButtonDialog() {
                 Enter the vehicle&apos;s information below.
               </DialogDescription>
             </DialogHeader>
-            <FieldGroup className="pt-4 pb-4">
-              <Field className="pt-2">
-                <Label htmlFor="plate-number">Vehicle Plate Number</Label>
-                <Input
-                  id="plate-number"
-                  name="plate-number"
-                  placeholder="AB12345"
-                  value={plateNumber}
-                  onChange={(e) => {
-                    setPlateNumber(e.target.value.toUpperCase());
-                    validateField("plateNumber", e.target.value.toUpperCase());
-                  }}
-                />
-                <p className="text-sm text-red-500 min-h-5">
-                  {errors.plateNumber ?? ""}
-                </p>
-              </Field>
-              <Field>
-                <Label htmlFor="vehicle-make-name">Vehicle Make</Label>
-                <Input
-                  id="vehicle-make-name"
-                  name="vehicle-make-name"
-                  placeholder="Honda"
-                  value={make}
-                  onChange={(e) => {
-                    setMake(e.target.value);
-                    validateField("make", e.target.value);
-                  }}
-                />
-                <p className="text-sm text-red-500 min-h-5">
-                  {errors.make ?? ""}
-                </p>
-              </Field>
-              <Field>
-                <Label htmlFor="vehicle-model-name">Vehicle Model</Label>
-                <Input
-                  id="vehicle-model-name"
-                  name="vehicle-model-name"
-                  placeholder="Accord"
-                  value={model}
-                  onChange={(e) => {
-                    setModel(e.target.value);
-                    validateField("model", e.target.value);
-                  }}
-                />
-                <p className="text-sm text-red-500 min-h-5">
-                  {errors.model ?? ""}
-                </p>
-              </Field>
-              <Field>
-                <Label htmlFor="vehicle-year-num">Vehicle Year</Label>
-                <Input
-                  id="vehicle-year-num"
-                  name="vehicle-year-num"
-                  placeholder="2008"
-                  value={year}
-                  onChange={(e) => {
-                    const val = e.target.value.replace(/\D/g, "");
-                    setYear(val);
-                    validateField("year", Number(val));
-                  }}
-                />
-                <p className="text-sm text-red-500 min-h-5">
-                  {errors.year ?? ""}
-                </p>
-              </Field>
-              <Field>
-                <Label htmlFor="vehicle-color">Vehicle Color</Label>
-                <Select
-                  value={color}
-                  onValueChange={(val) => {
-                    setColor(val as Color);
-                    validateField("color", val);
-                  }}
-                >
-                  <SelectTrigger id="vehicle-color" className="w-full">
-                    <SelectValue placeholder="Select a color" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Colors</SelectLabel>
-                      {VEHICLE_COLORS.map((col) => (
-                        <SelectItem key={col} value={col}>
-                          {col}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <p className="text-sm text-red-500 min-h-5">
-                  {errors.color ?? ""}
-                </p>
-              </Field>
-              <Field className="pb-4">
-                <Label htmlFor="vehicle-location">Tow Pound Location</Label>
-                <Select
-                  value={location}
-                  onValueChange={(val) => {
-                    setLocation(val as Location);
-                    validateField("location", val);
-                  }}
-                >
-                  <SelectTrigger id="vehicle-location" className="w-full">
-                    <SelectValue placeholder="Select a location" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Chicago Pound Locations</SelectLabel>
-                      {TOW_POUND_LOCATIONS.map((loc) => (
-                        <SelectItem key={loc} value={loc}>
-                          {loc}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <p className="text-sm text-red-500 min-h-5">
-                  {errors.location ?? ""}
-                </p>
-              </Field>
-            </FieldGroup>
-            <DialogFooter>
+            <div className="overflow-y-auto max-h-[60vh] pr-1">
+              <FieldGroup className="pt-2 pb-2">
+                <Field>
+                  <Label htmlFor="plate-number">Vehicle Plate Number</Label>
+                  <Input
+                    id="plate-number"
+                    name="plate-number"
+                    placeholder="AB12345"
+                    value={plateNumber}
+                    onChange={(e) => {
+                      setPlateNumber(e.target.value.toUpperCase());
+                      validateField(
+                        "plateNumber",
+                        e.target.value.toUpperCase()
+                      );
+                    }}
+                  />
+                  {errors.plateNumber && (
+                    <p className="text-xs text-red-500">{errors.plateNumber}</p>
+                  )}
+                </Field>
+                <Field>
+                  <Label htmlFor="vehicle-make-name">Vehicle Make</Label>
+                  <Input
+                    id="vehicle-make-name"
+                    name="vehicle-make-name"
+                    placeholder="Honda"
+                    value={make}
+                    onChange={(e) => {
+                      setMake(e.target.value);
+                      validateField("make", e.target.value);
+                    }}
+                  />
+                  {errors.make && (
+                    <p className="text-xs text-red-500">{errors.make}</p>
+                  )}
+                </Field>
+                <Field>
+                  <Label htmlFor="vehicle-model-name">Vehicle Model</Label>
+                  <Input
+                    id="vehicle-model-name"
+                    name="vehicle-model-name"
+                    placeholder="Accord"
+                    value={model}
+                    onChange={(e) => {
+                      setModel(e.target.value);
+                      validateField("model", e.target.value);
+                    }}
+                  />
+                  {errors.model && (
+                    <p className="text-xs text-red-500">{errors.model}</p>
+                  )}
+                </Field>
+                <Field>
+                  <Label htmlFor="vehicle-year-num">Vehicle Year</Label>
+                  <Input
+                    id="vehicle-year-num"
+                    name="vehicle-year-num"
+                    placeholder="2008"
+                    value={year}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, "");
+                      setYear(val);
+                      validateField("year", Number(val));
+                    }}
+                  />
+                  {errors.year && (
+                    <p className="text-xs text-red-500">{errors.year}</p>
+                  )}
+                </Field>
+                <Field>
+                  <Label htmlFor="vehicle-color">Vehicle Color</Label>
+                  <Select
+                    value={color}
+                    onValueChange={(val) => {
+                      setColor(val as Color);
+                      validateField("color", val);
+                    }}
+                  >
+                    <SelectTrigger id="vehicle-color" className="w-full">
+                      <SelectValue placeholder="Select a color" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Colors</SelectLabel>
+                        {VEHICLE_COLORS.map((col) => (
+                          <SelectItem key={col} value={col}>
+                            {col}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {errors.color && (
+                    <p className="text-xs text-red-500">{errors.color}</p>
+                  )}
+                </Field>
+                <Field>
+                  <Label htmlFor="vehicle-location">Tow Pound Location</Label>
+                  <Select
+                    value={location}
+                    onValueChange={(val) => {
+                      setLocation(val as Location);
+                      validateField("location", val);
+                    }}
+                  >
+                    <SelectTrigger id="vehicle-location" className="w-full">
+                      <SelectValue placeholder="Select a location" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Chicago Pound Locations</SelectLabel>
+                        {TOW_POUND_LOCATIONS.map((loc) => (
+                          <SelectItem key={loc} value={loc}>
+                            {loc}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {errors.location && (
+                    <p className="text-xs text-red-500">{errors.location}</p>
+                  )}
+                </Field>
+              </FieldGroup>
+            </div>
+            <DialogFooter className="pt-4">
               <DialogClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DialogClose>
-              <Button type="submit" disabled={loading}>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="hover:brightness-75 transition-all duration-200"
+              >
                 {loading ? "Saving..." : "Save changes"}
               </Button>
             </DialogFooter>
