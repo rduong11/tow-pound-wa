@@ -144,7 +144,7 @@ export default function ButtonDialog() {
                 Enter the vehicle&apos;s information below.
               </DialogDescription>
             </DialogHeader>
-            <div className="overflow-y-auto max-h-[60vh] pr-1">
+            <div className="overflow-y-auto max-h-[60vh] px-1">
               <FieldGroup className="pt-2 pb-2">
                 <Field>
                   <Label htmlFor="plate-number">Vehicle Plate Number</Label>
