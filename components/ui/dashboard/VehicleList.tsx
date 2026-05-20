@@ -1,4 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
+import VehicleCard from "./VehicleCard";
 
 async function fetchVehicles() {
   const supabase = await createClient();
@@ -29,9 +30,16 @@ export default async function VehicleList() {
   return (
     <div>
       {response.data.map((vehicle) => (
-        <div key={vehicle.id}>
-          {vehicle.plateNumber} — {vehicle.make} {vehicle.model}
-        </div>
+        <VehicleCard 
+          key={vehicle.id}
+          id={vehicle.id}
+          plateNumber={vehicle.plateNumber}
+          make={vehicle.make}
+          model={vehicle.model}
+          color={vehicle.color}
+          status={vehicle.status}
+          year={vehicle.year}
+        />
       ))}
     </div>
   );
