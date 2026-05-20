@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "../shadcn/card";
 
 type VehicleCardProps = {
-  id: number;
+  id: string;
   plateNumber: string;
   make: string;
   model: string;
@@ -12,20 +12,40 @@ type VehicleCardProps = {
   year: number;
 };
 
-export default function VehicleCard(vehicleData: VehicleCardProps) {
+export default function VehicleCard({
+  id,
+  plateNumber,
+  make,
+  model,
+  color,
+  status,
+  year,
+}: VehicleCardProps) {
+  const statusConfig: Record<VehicleStatus, { color: string; width: string }> =
+    {
+      pending: { color: "bg-yellow-400", width: "w-1/4" },
+      in_progress: { color: "bg-blue-400", width: "w-1/2" },
+      ready: { color: "bg-green-400", width: "w-3/4" },
+      picked_up: { color: "bg-gray-400", width: "w-full" },
+    };
+  console.log(status);
   return (
-    <Link href={`[${vehicleData.id}]`}>
+    <Link href={`/dashboard/vehicles/${id}`}>
       <div>
         <Card>
           <CardHeader>
             <CardTitle>
-              {vehicleData.plateNumber} - {vehicleData.status}
+              {plateNumber} - {status}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {vehicleData.year} {vehicleData.color} {vehicleData.make}{" "}
-            {vehicleData.model}
+            {year} {color} {make} {model}
           </CardContent>
+          <div className="w-full bg-gray-200 h-2 rounded-full">
+            <div
+              className={`h-2 rounded-full ${statusConfig[status].color} ${statusConfig[status].width}`}
+            />
+          </div>
         </Card>
       </div>
     </Link>
