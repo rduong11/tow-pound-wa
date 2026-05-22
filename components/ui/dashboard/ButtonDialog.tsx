@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/shadcn/dialog";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/shadcn/field";
 import { Input } from "@/components/ui/shadcn/input";
-import { Label } from "@/components/ui/shadcn/label";
 import { submitVehicleEntry } from "@/utils/actions/vehicleForm";
 import { TOW_POUND_LOCATIONS } from "@/utils/constants/poundLocations";
 import { VEHICLE_COLORS } from "@/utils/constants/vehicleColors";

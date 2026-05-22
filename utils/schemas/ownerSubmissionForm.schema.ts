@@ -15,6 +15,12 @@ export const ownerSubmissionFormSchema = z.object({
   id_photo_back: z
     .string()
     .min(1, { message: "At least one character is required" }),
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, {
+      message: "Please enter a valid email address",
+    }),
 });
 
 export type OwnerSubmissionFormSchema = z.infer<
