@@ -1,3 +1,9 @@
+import OwnerSubmissionForm from "@/components/ui/owner/OwnerSubmissionForm";
+
 export default function OwnerVehicleFormPage() {
-  return <div>test</div>;
+  return (
+    <div>
+      <OwnerSubmissionForm />
+    </div>
+  );
 }

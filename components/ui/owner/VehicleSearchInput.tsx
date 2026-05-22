@@ -2,10 +2,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "../shadcn/button";
-import { Field } from "../shadcn/field";
+import { Field, FieldLabel } from "../shadcn/field";
 import { Input } from "../shadcn/input";
 import { plateSchema } from "@/utils/schemas/vehicleForm.schema";
 import { searchVehicle } from "@/utils/actions/vehicleSearch";
+import { ButtonGroup } from "../shadcn/button-group";
 
 export default function VehicleSearchInput() {
   const [plateNumber, setPlateNumber] = useState("");
@@ -45,19 +46,24 @@ export default function VehicleSearchInput() {
 
   return (
     <div className="max-w-md mx-auto">
-      <Field orientation="horizontal">
-        <Input
-          value={plateNumber}
-          placeholder="AB12345"
-          onChange={(e) => {
-            const val = e.target.value.toUpperCase();
-            setPlateNumber(val);
-            setError(validatePlate(val));
-          }}
-        />
-        <Button onClick={handleSearch} disabled={loading}>
-          {loading ? "Searching..." : "Search"}
-        </Button>
+      <Field>
+        <FieldLabel htmlFor="vehicle-search-input">
+          Enter your vehicle plate number
+        </FieldLabel>
+        <ButtonGroup>
+          <Input
+            value={plateNumber}
+            placeholder="AB12345"
+            onChange={(e) => {
+              const val = e.target.value.toUpperCase();
+              setPlateNumber(val);
+              setError(validatePlate(val));
+            }}
+          />
+          <Button onClick={handleSearch} disabled={loading}>
+            {loading ? "Searching..." : "Search"}
+          </Button>
+        </ButtonGroup>
       </Field>
       <p className="text-xs text-red-500 h-4">{error}</p>
     </div>

@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/shadcn/dialog";
-import { Field, FieldGroup } from "@/components/ui/shadcn/field";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/shadcn/field";
 import { Input } from "@/components/ui/shadcn/input";
 import { Label } from "@/components/ui/shadcn/label";
 import { submitVehicleEntry } from "@/utils/actions/vehicleForm";
@@ -69,7 +69,7 @@ export default function ButtonDialog() {
 
   const validateField = (
     field: keyof VehicleFormData,
-    value: string | number
+    value: string | number,
   ) => {
     const result = vehicleSchema.shape[field].safeParse(value);
     if (result.success) {
@@ -147,7 +147,9 @@ export default function ButtonDialog() {
             <div className="overflow-y-auto max-h-[60vh] px-1">
               <FieldGroup className="pt-2 pb-2">
                 <Field>
-                  <Label htmlFor="plate-number">Vehicle Plate Number</Label>
+                  <FieldLabel htmlFor="plate-number">
+                    Vehicle Plate Number
+                  </FieldLabel>
                   <Input
                     id="plate-number"
                     name="plate-number"
@@ -157,7 +159,7 @@ export default function ButtonDialog() {
                       setPlateNumber(e.target.value.toUpperCase());
                       validateField(
                         "plateNumber",
-                        e.target.value.toUpperCase()
+                        e.target.value.toUpperCase(),
                       );
                     }}
                   />
@@ -166,7 +168,9 @@ export default function ButtonDialog() {
                   )}
                 </Field>
                 <Field>
-                  <Label htmlFor="vehicle-make-name">Vehicle Make</Label>
+                  <FieldLabel htmlFor="vehicle-make-name">
+                    Vehicle Make
+                  </FieldLabel>
                   <Input
                     id="vehicle-make-name"
                     name="vehicle-make-name"
@@ -182,7 +186,9 @@ export default function ButtonDialog() {
                   )}
                 </Field>
                 <Field>
-                  <Label htmlFor="vehicle-model-name">Vehicle Model</Label>
+                  <FieldLabel htmlFor="vehicle-model-name">
+                    Vehicle Model
+                  </FieldLabel>
                   <Input
                     id="vehicle-model-name"
                     name="vehicle-model-name"
@@ -198,7 +204,9 @@ export default function ButtonDialog() {
                   )}
                 </Field>
                 <Field>
-                  <Label htmlFor="vehicle-year-num">Vehicle Year</Label>
+                  <FieldLabel htmlFor="vehicle-year-num">
+                    Vehicle Year
+                  </FieldLabel>
                   <Input
                     id="vehicle-year-num"
                     name="vehicle-year-num"
@@ -215,7 +223,7 @@ export default function ButtonDialog() {
                   )}
                 </Field>
                 <Field>
-                  <Label htmlFor="vehicle-color">Vehicle Color</Label>
+                  <FieldLabel htmlFor="vehicle-color">Vehicle Color</FieldLabel>
                   <Select
                     value={color}
                     onValueChange={(val) => {
@@ -242,7 +250,9 @@ export default function ButtonDialog() {
                   )}
                 </Field>
                 <Field>
-                  <Label htmlFor="vehicle-location">Tow Pound Location</Label>
+                  <FieldLabel htmlFor="vehicle-location">
+                    Tow Pound Location
+                  </FieldLabel>
                   <Select
                     value={location}
                     onValueChange={(val) => {
