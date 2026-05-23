@@ -31,6 +31,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../shadcn/select";
+import z from "zod";
 
 type Location = (typeof TOW_POUND_LOCATIONS)[number];
 type Color = (typeof VEHICLE_COLORS)[number];
@@ -68,7 +69,7 @@ export default function ButtonDialog() {
 
   const validateField = (
     field: keyof VehicleFormData,
-    value: string | number,
+    value: string | number
   ) => {
     const result = vehicleSchema.shape[field].safeParse(value);
     if (result.success) {
@@ -92,14 +93,14 @@ export default function ButtonDialog() {
       });
 
       if (!result.success) {
-        const fieldErrors = result.error.flatten().fieldErrors;
+        const fieldErrors = z.treeifyError(result.error);
         setErrors({
-          plateNumber: fieldErrors.plateNumber?.[0],
-          make: fieldErrors.make?.[0],
-          model: fieldErrors.model?.[0],
-          year: fieldErrors.year?.[0],
-          color: fieldErrors.color?.[0],
-          location: fieldErrors.location?.[0],
+          plateNumber: fieldErrors.properties?.plateNumber?.errors[0],
+          make: fieldErrors.properties?.make?.errors[0],
+          model: fieldErrors.properties?.model?.errors[0],
+          year: fieldErrors.properties?.year?.errors[0],
+          color: fieldErrors.properties?.color?.errors[0],
+          location: fieldErrors.properties?.location?.errors[0],
         });
         return;
       }
@@ -158,7 +159,7 @@ export default function ButtonDialog() {
                       setPlateNumber(e.target.value.toUpperCase());
                       validateField(
                         "plateNumber",
-                        e.target.value.toUpperCase(),
+                        e.target.value.toUpperCase()
                       );
                     }}
                   />

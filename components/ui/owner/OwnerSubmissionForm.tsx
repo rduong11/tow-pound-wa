@@ -10,6 +10,7 @@ import { createClient } from "@/utils/supabase/client";
 import toast from "react-hot-toast";
 import OwnerSubmissionConfirmation from "./OwnerSubmissionConfirmation";
 import OwnerFormFields from "./OwnerFormField";
+import z from "zod";
 
 type FormErrors = Partial<Record<keyof OwnerSubmissionFormSchema, string>>;
 type OwnerSubmissionFormProps = {
@@ -27,16 +28,15 @@ const uploadPhoto = async (
   const fileName = `${vehicleId}/${side}-${Date.now()}`;
 
   const { data, error } = await supabase.storage
-    .from("tow-pound-Ids")
+    .from("tow-pound-ids")
     .upload(fileName, file);
 
   if (error) {
-    console.log("Error uploading photo", error);
     return null;
   }
 
   const { data: urlData } = supabase.storage
-    .from("tow-pound-Ids")
+    .from("tow-pound-ids")
     .getPublicUrl(data.path);
 
   return urlData.publicUrl;
@@ -84,34 +84,34 @@ export default function OwnerSubmissionForm({
     e.preventDefault();
     try {
       setLoading(true);
-      setErrors({});
+
+      const allErrors: FormErrors = {};
 
       const textResult = ownerSubmissionFormSchema
         .omit({ idPhotoFront: true, idPhotoBack: true })
         .safeParse({ firstName, lastName, email, address });
-      // FIX THIS FLATTEN AND ALSO IN THE BUTTON DIALOG
+
       if (!textResult.success) {
-        const fieldErrors = textResult.error.flatten().fieldErrors;
-        setErrors({
-          firstName: fieldErrors.firstName?.[0],
-          lastName: fieldErrors.lastName?.[0],
-          email: fieldErrors.email?.[0],
-          address: fieldErrors.address?.[0],
-        });
-        return;
+        const fieldErrors = z.treeifyError(textResult.error);
+        allErrors.firstName = fieldErrors.properties?.firstName?.errors[0];
+        allErrors.lastName = fieldErrors.properties?.lastName?.errors[0];
+        allErrors.email = fieldErrors.properties?.email?.errors[0];
+        allErrors.address = fieldErrors.properties?.address?.errors[0];
       }
 
-      if (!idPhotoFront || !idPhotoBack) {
-        setErrors((prev) => ({
-          ...prev,
-          idPhotoFront: !idPhotoFront ? "Front photo is required" : undefined,
-          idPhotoBack: !idPhotoBack ? "Back photo is required" : undefined,
-        }));
+      if (!idPhotoFront) allErrors.idPhotoFront = "Front photo is required";
+      if (!idPhotoBack) allErrors.idPhotoBack = "Back photo is required";
+
+      if (
+        Object.keys(allErrors).some((key) => allErrors[key as keyof FormErrors])
+      ) {
+        setErrors(allErrors);
         return;
       }
+      setErrors({});
 
-      const frontUrl = await uploadPhoto(idPhotoFront, vehicleId, "front");
-      const backUrl = await uploadPhoto(idPhotoBack, vehicleId, "back");
+      const frontUrl = await uploadPhoto(idPhotoFront!, vehicleId, "front");
+      const backUrl = await uploadPhoto(idPhotoBack!, vehicleId, "back");
 
       if (!frontUrl || !backUrl) {
         toast.error("Failed to upload photos. Please try again.");
