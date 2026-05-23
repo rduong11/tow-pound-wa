@@ -65,6 +65,7 @@ export default function OwnerSubmissionForm({
     }
   };
 
+  //   NEED TO ADD VALIDATION CHECK FOR FILE SIZES TOO BIG
   const validateIdFile = (
     file: File,
     field: "idPhotoFront" | "idPhotoBack"

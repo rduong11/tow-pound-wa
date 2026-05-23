@@ -34,5 +34,15 @@ export async function submitOwnerInfo(
     return { error: error.message };
   }
 
+  const { error: statusError } = await supabase
+    .from("vehicles")
+    .update({ status: "in_progress" })
+    .eq("id", data.vehicleId);
+
+  if (statusError) {
+    console.log("Error updating vehicle status", statusError);
+    return { error: statusError.message };
+  }
+
   return { error: null };
 }
