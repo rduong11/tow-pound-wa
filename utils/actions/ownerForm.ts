@@ -6,7 +6,9 @@ import {
 } from "../schemas/ownerSubmissionForm.schema";
 import { createClient } from "../supabase/server";
 
-export async function submitOwnerInfo(data: OwnerSubmissionFormSchema) {
+export async function submitOwnerInfo(
+  data: OwnerSubmissionFormSchema & { vehicleId: string }
+) {
   const supabase = await createClient();
   const result = ownerSubmissionFormSchema.safeParse(data);
 
@@ -14,7 +16,7 @@ export async function submitOwnerInfo(data: OwnerSubmissionFormSchema) {
     return { error: result.error.issues[0].message };
   }
 
-  const { firstName, lastName, email, address, id_photo_front, id_photo_back } =
+  const { firstName, lastName, email, address, idPhotoFront, idPhotoBack } =
     result.data;
 
   const { error } = await supabase.from("owner_submissions").insert({
@@ -22,8 +24,9 @@ export async function submitOwnerInfo(data: OwnerSubmissionFormSchema) {
     lastName,
     email,
     address,
-    id_photo_front,
-    id_photo_back,
+    idPhotoFront,
+    idPhotoBack,
+    vehicle_id: data.vehicleId,
   });
 
   if (error) {

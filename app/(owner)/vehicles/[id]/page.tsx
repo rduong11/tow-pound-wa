@@ -1,9 +1,14 @@
 import OwnerSubmissionForm from "@/components/ui/owner/OwnerSubmissionForm";
 
-export default function OwnerVehicleFormPage() {
+export default async function OwnerVehicleFormPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   return (
     <div>
-      <OwnerSubmissionForm />
+      <OwnerSubmissionForm vehicleId={id} />
     </div>
   );
 }
