@@ -89,7 +89,7 @@ export default function OwnerSubmissionForm({
       const textResult = ownerSubmissionFormSchema
         .omit({ idPhotoFront: true, idPhotoBack: true })
         .safeParse({ firstName, lastName, email, address });
-
+      // FIX THIS FLATTEN AND ALSO IN THE BUTTON DIALOG
       if (!textResult.success) {
         const fieldErrors = textResult.error.flatten().fieldErrors;
         setErrors({
