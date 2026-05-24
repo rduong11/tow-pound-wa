@@ -18,6 +18,7 @@ type OwnerSubmissionFormProps = {
 };
 
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg", "application/pdf"];
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const uploadPhoto = async (
   file: File,
@@ -65,7 +66,6 @@ export default function OwnerSubmissionForm({
     }
   };
 
-  //   NEED TO ADD VALIDATION CHECK FOR FILE SIZES TOO BIG
   const validateIdFile = (
     file: File,
     field: "idPhotoFront" | "idPhotoBack"
@@ -77,6 +77,15 @@ export default function OwnerSubmissionForm({
       }));
       return false;
     }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "File size must be under 5MB",
+      }));
+      return false;
+    }
+
     setErrors((prev) => ({ ...prev, [field]: undefined }));
     return true;
   };
