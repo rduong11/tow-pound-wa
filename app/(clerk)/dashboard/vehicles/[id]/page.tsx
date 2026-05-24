@@ -1,5 +1,4 @@
 import { createClient } from "@/utils/supabase/server";
-
 import {
   Card,
   CardContent,
@@ -8,6 +7,7 @@ import {
 } from "@/components/ui/shadcn/card";
 import { Separator } from "@/components/ui/shadcn/separator";
 import { Badge } from "@/components/ui/shadcn/badge";
+import OwnerSubmissionCard from "@/components/ui/dashboard/OwnerSubmissionCard";
 
 async function fetchVehicleById(id: string) {
   const supabase = await createClient();
@@ -41,8 +41,8 @@ export default async function VehicleDetailPage({
   const vehicle = response.data;
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="max-w-2xl mx-auto p-6 space-y-6">
+      <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">{vehicle.plateNumber}</h1>
         <Badge>{vehicle.status}</Badge>
       </div>
@@ -77,6 +77,7 @@ export default async function VehicleDetailPage({
           </div>
         </CardContent>
       </Card>
+      <OwnerSubmissionCard vehicleId={id} />
     </div>
   );
 }
