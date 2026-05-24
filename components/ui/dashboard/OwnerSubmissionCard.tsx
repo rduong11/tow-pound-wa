@@ -39,54 +39,54 @@ export default async function OwnerSubmissionCard({
   return (
     <div className="max-w-2xl mx-auto p-6">
       <div className="flex items-center justify-between mb-6">
-        <p className="text-sm text-muted-foreground">
-          Submitted {new Date(ownerInfo?.created_at).toLocaleDateString()}
-        </p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Owner Information</CardTitle>
+          </CardHeader>
+          <p className="text-sm text-muted-foreground">
+            Submitted {new Date(ownerInfo?.created_at).toLocaleDateString()}
+          </p>
+          <CardContent className="space-y-4">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">First Name</span>
+              <span>{ownerInfo?.firstName}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Last Name</span>
+              <span>{ownerInfo?.lastName}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Email</span>
+              <span>{ownerInfo?.email}</span>
+            </div>
+            <Separator />
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Address</span>
+              <span>{ownerInfo?.address}</span>
+            </div>
+            <Separator />
+            <div className="flex flex-col gap-2">
+              <span className="text-muted-foreground">Front ID Photo</span>
+              <img
+                src={ownerInfo?.idPhotoFront}
+                alt="Front ID"
+                className="w-full rounded-md"
+              />
+            </div>
+            <Separator />
+            <div className="flex flex-col gap-2">
+              <span className="text-muted-foreground">Back ID Photo</span>
+              <img
+                src={ownerInfo?.idPhotoBack}
+                alt="Back ID"
+                className="w-full rounded-md"
+              />
+            </div>
+          </CardContent>
+        </Card>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Owner Information</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">First Name</span>
-            <span>{ownerInfo?.firstName}</span>
-          </div>
-          <Separator />
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Last Name</span>
-            <span>{ownerInfo?.lastName}</span>
-          </div>
-          <Separator />
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Email</span>
-            <span>{ownerInfo?.email}</span>
-          </div>
-          <Separator />
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Address</span>
-            <span>{ownerInfo?.address}</span>
-          </div>
-          <Separator />
-          <div className="flex flex-col gap-2">
-            <span className="text-muted-foreground">Front ID Photo</span>
-            <img
-              src={ownerInfo?.idPhotoFront}
-              alt="Front ID"
-              className="w-full rounded-md"
-            />
-          </div>
-          <Separator />
-          <div className="flex flex-col gap-2">
-            <span className="text-muted-foreground">Back ID Photo</span>
-            <img
-              src={ownerInfo?.idPhotoBack}
-              alt="Back ID"
-              className="w-full rounded-md"
-            />
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

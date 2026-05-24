@@ -41,43 +41,51 @@ export default async function VehicleDetailPage({
   const vehicle = response.data;
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">{vehicle.plateNumber}</h1>
-        <Badge>{vehicle.status}</Badge>
-      </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Vehicle Information</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Make</span>
-            <span>{vehicle.make}</span>
+    <div className="p-6">
+      <Card className="w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x">
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h1 className="text-2xl font-semibold">Vehicle Information</h1>
+              <Badge>{vehicle.status}</Badge>
+            </div>
+            <CardContent className="px-0 space-y-6">
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Plate Number</span>
+                <span>{vehicle.plateNumber}</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Make</span>
+                <span>{vehicle.make}</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Model</span>
+                <span>{vehicle.model}</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Year</span>
+                <span>{vehicle.year}</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Color</span>
+                <span>{vehicle.color}</span>
+              </div>
+              <Separator />
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Location</span>
+                <span>{vehicle.location}</span>
+              </div>
+            </CardContent>
           </div>
-          <Separator />
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Model</span>
-            <span>{vehicle.model}</span>
+          <div className="p-6">
+            <OwnerSubmissionCard vehicleId={id} />
           </div>
-          <Separator />
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Year</span>
-            <span>{vehicle.year}</span>
-          </div>
-          <Separator />
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Color</span>
-            <span>{vehicle.color}</span>
-          </div>
-          <Separator />
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Location</span>
-            <span>{vehicle.location}</span>
-          </div>
-        </CardContent>
+        </div>
       </Card>
-      <OwnerSubmissionCard vehicleId={id} />
     </div>
   );
 }
