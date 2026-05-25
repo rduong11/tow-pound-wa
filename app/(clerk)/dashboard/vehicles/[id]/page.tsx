@@ -1,13 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/shadcn/card";
-import { Separator } from "@/components/ui/shadcn/separator";
 import { Badge } from "@/components/ui/shadcn/badge";
+import { Card } from "@/components/ui/shadcn/card";
+import VehicleInfoCard from "@/components/ui/dashboard/VehicleInfoCard";
 import OwnerSubmissionCard from "@/components/ui/dashboard/OwnerSubmissionCard";
+import { Button } from "@/components/ui/shadcn/button";
 
 async function fetchVehicleById(id: string) {
   const supabase = await createClient();
@@ -43,45 +39,25 @@ export default async function VehicleDetailPage({
   return (
     <div className="p-6">
       <Card className="w-full">
+        <div className="flex items-center justify-between pb-6 px-6 border-b">
+          <Button variant="destructive">Deny</Button>
+          <Badge>{vehicle.status}</Badge>
+          <Button className="bg-green-600 hover:brightness-75 transition-all duration-200">
+            Approve
+          </Button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x">
-          <div className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="text-2xl font-semibold">Vehicle Information</h1>
-              <Badge>{vehicle.status}</Badge>
-            </div>
-            <CardContent className="px-0 space-y-6">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Plate Number</span>
-                <span>{vehicle.plateNumber}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Make</span>
-                <span>{vehicle.make}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Model</span>
-                <span>{vehicle.model}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Year</span>
-                <span>{vehicle.year}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Color</span>
-                <span>{vehicle.color}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Location</span>
-                <span>{vehicle.location}</span>
-              </div>
-            </CardContent>
+          <div className="p-12">
+            <VehicleInfoCard
+              plateNumber={vehicle.plateNumber}
+              make={vehicle.make}
+              model={vehicle.model}
+              year={vehicle.year}
+              color={vehicle.color}
+              location={vehicle.location}
+            />
           </div>
-          <div className="p-6">
+          <div className="p-12">
             <OwnerSubmissionCard vehicleId={id} />
           </div>
         </div>
