@@ -22,6 +22,15 @@ async function fetchVehicleById(id: string) {
   return { data };
 }
 
+// handle deny
+// trigger dialog with an input field "comment"
+// re-render the confirmation page to have this comment
+
+// handle approve
+// set status to "ready"
+// reroute clerk to dashboard
+// re-render the confirmation page to the payment page
+
 export default async function VehicleDetailPage({
   params,
 }: {
