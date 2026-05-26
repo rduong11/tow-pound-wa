@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/shadcn/card";
 import VehicleInfoCard from "@/components/ui/dashboard/VehicleInfoCard";
 import OwnerSubmissionCard from "@/components/ui/dashboard/OwnerSubmissionCard";
 import { Button } from "@/components/ui/shadcn/button";
+import { revalidatePath } from "next/cache";
 
 async function fetchVehicleById(id: string) {
   const supabase = await createClient();
@@ -27,9 +28,22 @@ async function fetchVehicleById(id: string) {
 // re-render the confirmation page to have this comment
 
 // handle approve
-// set status to "ready"
-// reroute clerk to dashboard
-// re-render the confirmation page to the payment page
+async function handleApprove(vehicleId: string) {
+  const supabase = await createClient();
+  const { error: statusError } = await supabase
+    .from("vehicles")
+    .update({ status: "ready" })
+    .eq("id", vehicleId);
+
+  if (statusError) {
+    console.log("Error updating vehicle status", statusError);
+    return { error: statusError.message };
+  }
+
+  revalidatePath("/dashboard");
+  // re-render the confirmation page to the payment page
+  return { error: null };
+}
 
 export default async function VehicleDetailPage({
   params,
