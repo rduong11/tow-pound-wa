@@ -5,6 +5,7 @@ import VehicleInfoCard from "@/components/ui/dashboard/VehicleInfoCard";
 import OwnerSubmissionCard from "@/components/ui/dashboard/OwnerSubmissionCard";
 import { Button } from "@/components/ui/shadcn/button";
 import { statusLabels, VehicleStatus } from "@/utils/schemas/vehicle.schema";
+import VehicleActionButtons from "@/components/ui/dashboard/VehicleActionButtons";
 
 async function fetchVehicleById(id: string) {
   const supabase = await createClient();
@@ -41,13 +42,10 @@ export default async function VehicleDetailPage({
     <div className="p-6">
       <Card className="w-full">
         <div className="flex items-center justify-between pb-6 px-6 border-b">
-          <Button variant="destructive">Deny</Button>
           <Badge>
             {statusLabels[(vehicle.status ?? "pending") as VehicleStatus]}
           </Badge>
-          <Button className="bg-green-600 hover:brightness-75 transition-all duration-200">
-            Approve
-          </Button>
+          <VehicleActionButtons vehicleId={id} />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x">
           <div className="p-12">
