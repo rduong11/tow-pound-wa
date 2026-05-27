@@ -1,4 +1,8 @@
-import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
+import {
+  VehicleStatus,
+  statusLabels,
+  statusConfig,
+} from "@/utils/schemas/vehicle.schema";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "../shadcn/card";
 
@@ -21,21 +25,13 @@ export default function VehicleCard({
   status,
   year,
 }: VehicleCardProps) {
-  const statusConfig: Record<VehicleStatus, { color: string; width: string }> =
-    {
-      pending: { color: "bg-yellow-400", width: "w-1/4" },
-      in_progress: { color: "bg-blue-400", width: "w-1/2" },
-      ready: { color: "bg-green-400", width: "w-3/4" },
-      picked_up: { color: "bg-gray-400", width: "w-full" },
-    };
-  console.log(status);
   return (
     <Link href={`/dashboard/vehicles/${id}`}>
       <div>
-        <Card>
+        <Card className="overflow-hidden">
           <CardHeader>
             <CardTitle>
-              {plateNumber} - {status}
+              {plateNumber} - {statusLabels[status ?? "pending"]}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -43,7 +39,7 @@ export default function VehicleCard({
           </CardContent>
           <div className="w-full bg-gray-200 h-2 rounded-full">
             <div
-              className={`h-2 rounded-full ${statusConfig[status].color} ${statusConfig[status].width}`}
+              className={`h-2 rounded-full ${statusConfig[status ?? "pending"].color} ${statusConfig[status ?? "pending"].width}`}
             />
           </div>
         </Card>

@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/shadcn/card";
 import VehicleInfoCard from "@/components/ui/dashboard/VehicleInfoCard";
 import OwnerSubmissionCard from "@/components/ui/dashboard/OwnerSubmissionCard";
 import { Button } from "@/components/ui/shadcn/button";
-import { revalidatePath } from "next/cache";
+import { statusLabels, VehicleStatus } from "@/utils/schemas/vehicle.schema";
 
 async function fetchVehicleById(id: string) {
   const supabase = await createClient();
@@ -20,29 +20,7 @@ async function fetchVehicleById(id: string) {
     return { error: error.message };
   }
 
-  return { data };
-}
-
-// handle deny
-// trigger dialog with an input field "comment"
-// re-render the confirmation page to have this comment
-
-// handle approve
-async function handleApprove(vehicleId: string) {
-  const supabase = await createClient();
-  const { error: statusError } = await supabase
-    .from("vehicles")
-    .update({ status: "ready" })
-    .eq("id", vehicleId);
-
-  if (statusError) {
-    console.log("Error updating vehicle status", statusError);
-    return { error: statusError.message };
-  }
-
-  revalidatePath("/dashboard");
-  // re-render the confirmation page to the payment page
-  return { error: null };
+  return { data: data as typeof data & { status: VehicleStatus } };
 }
 
 export default async function VehicleDetailPage({
@@ -64,7 +42,9 @@ export default async function VehicleDetailPage({
       <Card className="w-full">
         <div className="flex items-center justify-between pb-6 px-6 border-b">
           <Button variant="destructive">Deny</Button>
-          <Badge>{vehicle.status}</Badge>
+          <Badge>
+            {statusLabels[(vehicle.status ?? "pending") as VehicleStatus]}
+          </Badge>
           <Button className="bg-green-600 hover:brightness-75 transition-all duration-200">
             Approve
           </Button>
