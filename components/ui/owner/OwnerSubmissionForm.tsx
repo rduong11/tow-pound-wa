@@ -17,7 +17,7 @@ type OwnerSubmissionFormProps = {
   vehicleId: string;
 };
 
-const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg", "application/pdf"];
+const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const uploadPhoto = async (
@@ -36,11 +36,7 @@ const uploadPhoto = async (
     return null;
   }
 
-  const { data: urlData } = supabase.storage
-    .from("tow-pound-ids")
-    .getPublicUrl(data.path);
-
-  return urlData.publicUrl;
+  return data.path;
 };
 
 export default function OwnerSubmissionForm({
@@ -73,7 +69,7 @@ export default function OwnerSubmissionForm({
     if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
       setErrors((prev) => ({
         ...prev,
-        [field]: "Only JPG and PDF files are accepted",
+        [field]: "Only JPG and JPEG files are accepted",
       }));
       return false;
     }
@@ -115,10 +111,17 @@ export default function OwnerSubmissionForm({
       if (
         Object.keys(allErrors).some((key) => allErrors[key as keyof FormErrors])
       ) {
-        setErrors(allErrors);
+        setErrors((prev) => ({
+          ...allErrors,
+          idPhotoFront: allErrors.idPhotoFront ?? prev.idPhotoFront,
+          idPhotoBack: allErrors.idPhotoBack ?? prev.idPhotoBack,
+        }));
         return;
       }
-      setErrors({});
+      setErrors((prev) => ({
+        idPhotoFront: prev.idPhotoFront,
+        idPhotoBack: prev.idPhotoBack,
+      }));
 
       const frontUrl = await uploadPhoto(idPhotoFront!, vehicleId, "front");
       const backUrl = await uploadPhoto(idPhotoBack!, vehicleId, "back");

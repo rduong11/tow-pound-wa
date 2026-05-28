@@ -17,3 +17,22 @@ export async function fetchOwnerSubmissionById(vehicleId: string) {
 
   return { data };
 }
+
+export async function getSignedUrls(frontPath: string, backPath: string) {
+  const supabase = await createClient();
+
+  const [frontResult, backResult] = await Promise.all([
+    supabase.storage.from("tow-pound-ids").createSignedUrl(frontPath, 3600),
+    supabase.storage.from("tow-pound-ids").createSignedUrl(backPath, 3600),
+  ]);
+
+  if (frontResult.error)
+    console.log("Error generating front signed URL", frontResult.error);
+  if (backResult.error)
+    console.log("Error generating back signed URL", backResult.error);
+
+  return {
+    frontSignedUrl: frontResult.data?.signedUrl ?? null,
+    backSignedUrl: backResult.data?.signedUrl ?? null,
+  };
+}

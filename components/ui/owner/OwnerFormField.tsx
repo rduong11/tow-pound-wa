@@ -134,7 +134,7 @@ export default function OwnerFormFields({
             {errors.idPhotoFront && (
               <p className="text-xs text-red-500">{errors.idPhotoFront}</p>
             )}
-            <FieldDescription>JPG or PDF only.</FieldDescription>
+            <FieldDescription>JPG or JPEG only.</FieldDescription>
           </Field>
           <Field>
             <FieldLabel htmlFor="id-photo-back">
@@ -154,7 +154,7 @@ export default function OwnerFormFields({
             {errors.idPhotoBack && (
               <p className="text-xs text-red-500">{errors.idPhotoBack}</p>
             )}
-            <FieldDescription>JPG or PDF only.</FieldDescription>
+            <FieldDescription>JPG or JPEG only.</FieldDescription>
           </Field>
         </FieldGroup>
         <Button

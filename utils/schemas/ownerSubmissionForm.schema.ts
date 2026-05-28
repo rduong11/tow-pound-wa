@@ -25,14 +25,8 @@ export const ownerSubmissionFormSchema = z.object({
     .regex(/^[0-9]+\s[a-zA-Z0-9\s\.\,\#\-]+$/, {
       message: "Please enter a valid street address",
     }),
-  idPhotoFront: z
-    .string()
-    .min(1, { message: "Front photo is required" })
-    .url({ message: "Invalid photo URL" }),
-  idPhotoBack: z
-    .string()
-    .min(1, { message: "Back photo is required" })
-    .url({ message: "Invalid photo URL" }),
+  idPhotoFront: z.string().min(1, { message: "Front photo is required" }),
+  idPhotoBack: z.string().min(1, { message: "Back photo is required" }),
 });
 
 export type OwnerSubmissionFormSchema = z.infer<

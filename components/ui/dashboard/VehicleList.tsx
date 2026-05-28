@@ -24,7 +24,7 @@ export default async function VehicleList() {
   }
 
   if (!response.data || response.data.length === 0) {
-    return <p className="text-secondary">No vehicles on record.</p>;
+    return <p>No vehicles on record.</p>;
   }
 
   return (

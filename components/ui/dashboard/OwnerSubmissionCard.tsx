@@ -1,7 +1,10 @@
 import { CardContent, CardHeader, CardTitle } from "../shadcn/card";
 import { Separator } from "../shadcn/separator";
 import Image from "next/image";
-import { fetchOwnerSubmissionById } from "@/utils/helpers/fetchOwnerSubmission";
+import {
+  fetchOwnerSubmissionById,
+  getSignedUrls,
+} from "@/utils/helpers/fetchOwnerSubmission";
 
 export default async function OwnerSubmissionCard({
   vehicleId,
@@ -21,6 +24,11 @@ export default async function OwnerSubmissionCard({
   }
 
   const ownerInfo = response.data;
+
+  const { frontSignedUrl, backSignedUrl } = await getSignedUrls(
+    ownerInfo.idPhotoFront,
+    ownerInfo.idPhotoBack
+  );
 
   return (
     <div>
@@ -53,24 +61,32 @@ export default async function OwnerSubmissionCard({
         <Separator />
         <div className="flex flex-col gap-2">
           <span className="text-muted-foreground">Front ID Photo</span>
-          <Image
-            src={ownerInfo.idPhotoFront}
-            alt="Front ID"
-            width={500}
-            height={300}
-            className="w-full rounded-md"
-          />
+          {frontSignedUrl ? (
+            <Image
+              src={frontSignedUrl}
+              alt="Front ID"
+              width={500}
+              height={300}
+              className="w-full rounded-md"
+            />
+          ) : (
+            <p className="text-xs text-red-500">Failed to load photo.</p>
+          )}
         </div>
         <Separator />
         <div className="flex flex-col gap-2">
           <span className="text-muted-foreground">Back ID Photo</span>
-          <Image
-            src={ownerInfo.idPhotoBack}
-            alt="Back ID"
-            width={500}
-            height={300}
-            className="w-full rounded-md"
-          />
+          {backSignedUrl ? (
+            <Image
+              src={backSignedUrl}
+              alt="Back ID"
+              width={500}
+              height={300}
+              className="w-full rounded-md"
+            />
+          ) : (
+            <p className="text-xs text-red-500">Failed to load photo.</p>
+          )}
         </div>
       </CardContent>
     </div>
