@@ -8,13 +8,16 @@ import {
 import { submitOwnerInfo } from "@/utils/actions/ownerForm";
 import { createClient } from "@/utils/supabase/client";
 import toast from "react-hot-toast";
-import OwnerSubmissionConfirmation from "./OwnerSubmissionConfirmation";
+import OwnerStatusResponse from "./OwnerStatusResponse";
 import OwnerFormFields from "./OwnerFormField";
 import z from "zod";
+import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
 
 type FormErrors = Partial<Record<keyof OwnerSubmissionFormSchema, string>>;
 type OwnerSubmissionFormProps = {
   vehicleId: string;
+  status: VehicleStatus;
+  denialReason: string | null;
 };
 
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg"];
@@ -23,7 +26,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const uploadPhoto = async (
   file: File,
   vehicleId: string,
-  side: "front" | "back"
+  side: "front" | "back",
 ) => {
   const supabase = createClient();
   const fileName = `${vehicleId}/${side}-${Date.now()}`;
@@ -41,6 +44,8 @@ const uploadPhoto = async (
 
 export default function OwnerSubmissionForm({
   vehicleId,
+  status,
+  denialReason,
 }: OwnerSubmissionFormProps) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -54,7 +59,7 @@ export default function OwnerSubmissionForm({
 
   const validateField = (
     field: keyof OwnerSubmissionFormSchema,
-    value: string
+    value: string,
   ) => {
     const result = ownerSubmissionFormSchema.shape[field].safeParse(value);
     if (result.success) {
@@ -64,7 +69,7 @@ export default function OwnerSubmissionForm({
 
   const validateIdFile = (
     file: File,
-    field: "idPhotoFront" | "idPhotoBack"
+    field: "idPhotoFront" | "idPhotoBack",
   ) => {
     if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
       setErrors((prev) => ({
@@ -155,8 +160,8 @@ export default function OwnerSubmissionForm({
     }
   };
 
-  return submitted ? (
-    <OwnerSubmissionConfirmation />
+  return submitted || status === "ready" || status === "denied" ? (
+    <OwnerStatusResponse status={status} denialReason={denialReason} />
   ) : (
     <OwnerFormFields
       firstName={firstName}
