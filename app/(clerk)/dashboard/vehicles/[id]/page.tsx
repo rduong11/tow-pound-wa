@@ -5,6 +5,7 @@ import OwnerSubmissionCard from "@/components/ui/dashboard/OwnerSubmissionCard";
 import VehicleActionButtons from "@/components/ui/dashboard/VehicleActionButtons";
 import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
 import BackButton from "@/components/ui/dashboard/BackButton";
+import { fetchOwnerSubmissionById } from "@/utils/helpers/fetchOwnerSubmission";
 
 async function fetchVehicleById(id: string) {
   const supabase = await createClient();
@@ -37,12 +38,19 @@ export default async function VehicleDetailPage({
 
   const vehicle = response.data;
 
+  const ownerSubmission = await fetchOwnerSubmissionById(id);
+  const hasSubmission = !!ownerSubmission?.data;
+
   return (
     <div className="p-6">
       <BackButton />
       <Card className="w-full">
         <div className="pb-6 px-6 border-b pt-6">
-          <VehicleActionButtons vehicleId={id} status={vehicle.status} />
+          <VehicleActionButtons
+            vehicleId={id}
+            status={vehicle.status}
+            hasSubmission={hasSubmission}
+          />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x">
           <div className="p-12">
