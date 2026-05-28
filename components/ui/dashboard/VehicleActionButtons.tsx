@@ -14,18 +14,23 @@ import {
   DialogClose,
 } from "@/components/ui/shadcn/dialog";
 import { Label } from "@/components/ui/shadcn/label";
-import { Input } from "@/components/ui/shadcn/input";
+import { Badge } from "@/components/ui/shadcn/badge";
 import { approveVehicle, denyVehicle } from "@/utils/actions/vehicleActions";
+import { VehicleStatus, statusLabels } from "@/utils/schemas/vehicle.schema";
 import toast from "react-hot-toast";
+import { Textarea } from "../shadcn/textarea";
 
 type VehicleActionButtonsProps = {
   vehicleId: string;
+  status: VehicleStatus;
 };
 
 export default function VehicleActionButtons({
   vehicleId,
+  status,
 }: VehicleActionButtonsProps) {
   const [comment, setComment] = useState("");
+  const [commentError, setCommentError] = useState("");
   const [loading, setLoading] = useState(false);
   const [denyOpen, setDenyOpen] = useState(false);
   const router = useRouter();
@@ -50,6 +55,11 @@ export default function VehicleActionButtons({
   };
 
   const handleDeny = async () => {
+    if (!comment.trim()) {
+      setCommentError("Please enter a reason for denial.");
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await denyVehicle(vehicleId, comment);
@@ -75,7 +85,10 @@ export default function VehicleActionButtons({
         open={denyOpen}
         onOpenChange={(val) => {
           setDenyOpen(val);
-          if (!val) setComment("");
+          if (!val) {
+            setComment("");
+            setCommentError("");
+          }
         }}
       >
         <DialogTrigger asChild>
@@ -90,14 +103,21 @@ export default function VehicleActionButtons({
               Enter a reason for denial. This will be visible to the car owner.
             </DialogDescription>
           </DialogHeader>
-          <div className="py-2">
+          <div className="py-2 flex flex-col gap-2">
             <Label htmlFor="comment">Comment</Label>
-            <Input
+            <Textarea
               id="comment"
               placeholder="Enter reason for denial..."
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              onChange={(e) => {
+                setComment(e.target.value);
+                if (e.target.value.trim()) setCommentError("");
+              }}
+              rows={4}
             />
+            {commentError && (
+              <p className="text-xs text-red-500">{commentError}</p>
+            )}
           </div>
           <DialogFooter>
             <DialogClose asChild>
@@ -106,13 +126,15 @@ export default function VehicleActionButtons({
             <Button
               variant="destructive"
               onClick={handleDeny}
-              disabled={loading || !comment.trim()}
+              disabled={loading}
             >
               {loading ? "Denying..." : "Confirm Deny"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Badge>{statusLabels[status]}</Badge>
 
       <Button
         className="bg-green-600 hover:brightness-75 transition-all duration-200"
