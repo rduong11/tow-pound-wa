@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/shadcn/button";
@@ -19,13 +17,14 @@ import { approveVehicle, denyVehicle } from "@/utils/actions/vehicleActions";
 import { VehicleStatus, statusLabels } from "@/utils/schemas/vehicle.schema";
 import toast from "react-hot-toast";
 import { Textarea } from "../shadcn/textarea";
+import { fetchOwnerSubmissionById } from "@/utils/helpers/fetchOwnerSubmission";
 
 type VehicleActionButtonsProps = {
   vehicleId: string;
   status: VehicleStatus;
 };
 
-export default function VehicleActionButtons({
+export default async function VehicleActionButtons({
   vehicleId,
   status,
 }: VehicleActionButtonsProps) {
@@ -33,7 +32,10 @@ export default function VehicleActionButtons({
   const [commentError, setCommentError] = useState("");
   const [loading, setLoading] = useState(false);
   const [denyOpen, setDenyOpen] = useState(false);
+  const [disableButton, setDisableButton] = useState(true);
   const router = useRouter();
+
+  const response = await fetchOwnerSubmissionById(vehicleId);
 
   const handleApprove = async () => {
     try {
@@ -92,7 +94,10 @@ export default function VehicleActionButtons({
         }}
       >
         <DialogTrigger asChild>
-          <Button variant="destructive" disabled={loading}>
+          <Button
+            variant="destructive"
+            disabled={!response.data ? disableButton : loading}
+          >
             Deny
           </Button>
         </DialogTrigger>
@@ -139,7 +144,7 @@ export default function VehicleActionButtons({
       <Button
         className="bg-green-600 hover:brightness-75 transition-all duration-200"
         onClick={handleApprove}
-        disabled={loading}
+        disabled={!response.data ? disableButton : loading}
       >
         {loading ? "Approving..." : "Approve"}
       </Button>

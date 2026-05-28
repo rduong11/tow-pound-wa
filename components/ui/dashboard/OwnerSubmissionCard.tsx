@@ -1,25 +1,7 @@
-import { createClient } from "@/utils/supabase/server";
 import { CardContent, CardHeader, CardTitle } from "../shadcn/card";
 import { Separator } from "../shadcn/separator";
 import Image from "next/image";
-
-async function fetchOwnerSubmissionById(vehicleId: string) {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("owner_submissions")
-    .select(
-      "firstName, lastName, address, idPhotoFront, idPhotoBack, email, created_at, vehicle_id",
-    )
-    .eq("vehicle_id", vehicleId)
-    .maybeSingle();
-
-  if (error) {
-    console.log("Error fetching owner submission", error);
-    return { error: error.message };
-  }
-
-  return { data };
-}
+import { fetchOwnerSubmissionById } from "@/utils/helpers/fetchOwnerSubmission";
 
 export default async function OwnerSubmissionCard({
   vehicleId,
