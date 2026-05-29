@@ -160,7 +160,10 @@ export default function OwnerSubmissionForm({
     }
   };
 
-  return submitted || status === "ready" || status === "denied" ? (
+  return submitted ||
+    status === "in_progress" ||
+    status === "ready" ||
+    status === "denied" ? (
     <OwnerStatusResponse status={status} denialReason={denialReason} />
   ) : (
     <OwnerFormFields
