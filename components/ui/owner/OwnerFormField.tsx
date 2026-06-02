@@ -17,6 +17,8 @@ type OwnerFormFieldsProps = {
   address: string;
   errors: FormErrors;
   loading: boolean;
+  existingPhotoFront?: string;
+  existingPhotoBack?: string;
   onFirstNameChange: (value: string) => void;
   onLastNameChange: (value: string) => void;
   onEmailChange: (value: string) => void;
@@ -25,7 +27,7 @@ type OwnerFormFieldsProps = {
   onPhotoBackChange: (file: File) => void;
   onValidateField: (
     field: keyof OwnerSubmissionFormSchema,
-    value: string
+    value: string,
   ) => void;
   onValidateIdFile: (file: File, field: "idPhotoFront" | "idPhotoBack") => void;
   onSubmit: (e: React.SubmitEvent) => void;
@@ -38,6 +40,8 @@ export default function OwnerFormFields({
   address,
   errors,
   loading,
+  existingPhotoFront,
+  existingPhotoBack,
   onFirstNameChange,
   onLastNameChange,
   onEmailChange,
@@ -49,9 +53,9 @@ export default function OwnerFormFields({
   onSubmit,
 }: OwnerFormFieldsProps) {
   return (
-    <div className="max-w-md mx-auto">
-      <form onSubmit={onSubmit}>
-        <FieldGroup className="pt-2 pb-2">
+    <div className="w-full max-w-md mx-auto">
+      <form onSubmit={onSubmit} className="w-full space-y-4">
+        <FieldGroup className="w-full pt-2 pb-4 flex flex-col gap-4">
           <Field>
             <FieldLabel htmlFor="first-name">First Name</FieldLabel>
             <Input
@@ -120,6 +124,11 @@ export default function OwnerFormFields({
             <FieldLabel htmlFor="id-photo-front">
               Front of ID / Drivers license
             </FieldLabel>
+            {existingPhotoFront && (
+              <p className="text-xs text-muted-foreground mb-1">
+                Previous photo on file. Upload a new one to replace it.
+              </p>
+            )}
             <Input
               id="id-photo-front"
               type="file"
@@ -140,6 +149,11 @@ export default function OwnerFormFields({
             <FieldLabel htmlFor="id-photo-back">
               Back of ID / Drivers license
             </FieldLabel>
+            {existingPhotoBack && (
+              <p className="text-xs text-muted-foreground mb-1">
+                Previous photo on file. Upload a new one to replace it.
+              </p>
+            )}
             <Input
               id="id-photo-back"
               type="file"

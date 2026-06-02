@@ -12,6 +12,12 @@ import OwnerStatusResponse from "./OwnerStatusResponse";
 import OwnerFormFields from "./OwnerFormField";
 import z from "zod";
 import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../shadcn/dialog";
 
 type FormErrors = Partial<Record<keyof OwnerSubmissionFormSchema, string>>;
 
@@ -70,7 +76,7 @@ export default function OwnerSubmissionForm({
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   const isResubmission = status === "denied" && existingSubmission !== null;
 
@@ -127,8 +133,16 @@ export default function OwnerSubmissionForm({
         allErrors.address = fieldErrors.properties?.address?.errors[0];
       }
 
-      if (!idPhotoFront) allErrors.idPhotoFront = "Front photo is required";
-      if (!idPhotoBack) allErrors.idPhotoBack = "Back photo is required";
+      const frontUrl = idPhotoFront
+        ? await uploadPhoto(idPhotoFront, vehicleId, "front")
+        : (existingSubmission?.idPhotoFront ?? null);
+
+      const backUrl = idPhotoBack
+        ? await uploadPhoto(idPhotoBack, vehicleId, "back")
+        : (existingSubmission?.idPhotoBack ?? null);
+
+      if (!frontUrl) allErrors.idPhotoFront = "Front photo is required";
+      if (!backUrl) allErrors.idPhotoBack = "Back photo is required";
 
       if (
         Object.keys(allErrors).some((key) => allErrors[key as keyof FormErrors])
@@ -146,22 +160,14 @@ export default function OwnerSubmissionForm({
         idPhotoBack: prev.idPhotoBack,
       }));
 
-      const frontUrl = await uploadPhoto(idPhotoFront!, vehicleId, "front");
-      const backUrl = await uploadPhoto(idPhotoBack!, vehicleId, "back");
-
-      if (!frontUrl || !backUrl) {
-        toast.error("Failed to upload photos. Please try again.");
-        return;
-      }
-
       const response = isResubmission
         ? await updateOwnerInfo({
             firstName,
             lastName,
             email,
             address,
-            idPhotoFront: frontUrl,
-            idPhotoBack: backUrl,
+            idPhotoFront: frontUrl!,
+            idPhotoBack: backUrl!,
             vehicleId,
           })
         : await submitOwnerInfo({
@@ -169,8 +175,8 @@ export default function OwnerSubmissionForm({
             lastName,
             email,
             address,
-            idPhotoFront: frontUrl,
-            idPhotoBack: backUrl,
+            idPhotoFront: frontUrl!,
+            idPhotoBack: backUrl!,
             vehicleId,
           });
 
@@ -180,7 +186,7 @@ export default function OwnerSubmissionForm({
       }
 
       setSubmitted(true);
-      setIsEditing(false);
+      setEditOpen(false);
     } catch (error) {
       console.error("Something went wrong. Please try again later.", error);
       toast.error("Something went wrong. Please try again later.");
@@ -190,35 +196,74 @@ export default function OwnerSubmissionForm({
   };
 
   const showStatusResponse =
-    !isEditing &&
-    (submitted ||
-      status === "in_progress" ||
-      status === "ready" ||
-      status === "denied");
+    submitted ||
+    status === "in_progress" ||
+    status === "ready" ||
+    status === "denied";
 
-  return showStatusResponse ? (
-    <OwnerStatusResponse
-      status={submitted ? "in_progress" : status}
-      denialReason={denialReason}
-      onEdit={status === "denied" ? () => setIsEditing(true) : undefined}
-    />
-  ) : (
-    <OwnerFormFields
-      firstName={firstName}
-      lastName={lastName}
-      email={email}
-      address={address}
-      errors={errors}
-      loading={loading}
-      onFirstNameChange={setFirstName}
-      onLastNameChange={setLastName}
-      onEmailChange={setEmail}
-      onAddressChange={setAddress}
-      onPhotoFrontChange={setIdPhotoFront}
-      onPhotoBackChange={setIdPhotoBack}
-      onValidateField={validateField}
-      onValidateIdFile={validateIdFile}
-      onSubmit={handleOwnerSubmission}
-    />
+  return (
+    <>
+      {showStatusResponse ? (
+        <OwnerStatusResponse
+          status={submitted ? "in_progress" : status}
+          denialReason={denialReason}
+          onEdit={status === "denied" ? () => setEditOpen(true) : undefined}
+        />
+      ) : (
+        <OwnerFormFields
+          firstName={firstName}
+          lastName={lastName}
+          email={email}
+          address={address}
+          errors={errors}
+          loading={loading}
+          onFirstNameChange={setFirstName}
+          onLastNameChange={setLastName}
+          onEmailChange={setEmail}
+          onAddressChange={setAddress}
+          onPhotoFrontChange={setIdPhotoFront}
+          onPhotoBackChange={setIdPhotoBack}
+          onValidateField={validateField}
+          onValidateIdFile={validateIdFile}
+          onSubmit={handleOwnerSubmission}
+        />
+      )}
+
+      <Dialog
+        open={editOpen}
+        onOpenChange={(val) => {
+          setEditOpen(val);
+          if (!val) setErrors({});
+        }}
+      >
+        <DialogContent
+          className="w-full sm:max-w-md max-h-[90vh] overflow-y-auto"
+          aria-describedby={undefined}
+        >
+          <DialogHeader>
+            <DialogTitle>Review & Resubmit</DialogTitle>
+          </DialogHeader>
+          <OwnerFormFields
+            firstName={firstName}
+            lastName={lastName}
+            email={email}
+            address={address}
+            errors={errors}
+            loading={loading}
+            onFirstNameChange={setFirstName}
+            onLastNameChange={setLastName}
+            onEmailChange={setEmail}
+            onAddressChange={setAddress}
+            onPhotoFrontChange={setIdPhotoFront}
+            onPhotoBackChange={setIdPhotoBack}
+            onValidateField={validateField}
+            onValidateIdFile={validateIdFile}
+            onSubmit={handleOwnerSubmission}
+            existingPhotoFront={existingSubmission?.idPhotoFront}
+            existingPhotoBack={existingSubmission?.idPhotoBack}
+          />
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
