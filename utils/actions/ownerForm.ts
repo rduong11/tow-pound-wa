@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import {
   ownerSubmissionFormSchema,
   OwnerSubmissionFormSchema,
@@ -87,8 +86,6 @@ export async function updateOwnerInfo(
     console.log("Error updating vehicle status", statusError);
     return { error: statusError.message };
   }
-
-  revalidatePath("/dashboard");
 
   return { error: null };
 }
