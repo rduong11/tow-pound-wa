@@ -60,7 +60,7 @@ export async function updateOwnerInfo(
   const { firstName, lastName, email, address, idPhotoFront, idPhotoBack } =
     result.data;
 
-  const { error } = await supabase
+  const { data: updatedRows, error } = await supabase
     .from("owner_submissions")
     .update({
       firstName,
@@ -70,11 +70,11 @@ export async function updateOwnerInfo(
       idPhotoFront,
       idPhotoBack,
     })
-    .eq("vehicle_id", data.vehicleId);
+    .eq("vehicle_id", data.vehicleId)
+    .select();
 
-  if (error) {
-    console.log("Error updating owner submission", error);
-    return { error: error.message };
+  if (!error && (!updatedRows || updatedRows.length === 0)) {
+    return { error: "Update failed. Please try again." };
   }
 
   const { error: statusError } = await supabase
