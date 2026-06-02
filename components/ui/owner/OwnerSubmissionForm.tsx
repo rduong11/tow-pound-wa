@@ -234,6 +234,12 @@ export default function OwnerSubmissionForm({
         onOpenChange={(val) => {
           setEditOpen(val);
           if (!val) setErrors({});
+          setFirstName(existingSubmission?.firstName ?? "");
+          setLastName(existingSubmission?.lastName ?? "");
+          setEmail(existingSubmission?.email ?? "");
+          setAddress(existingSubmission?.address ?? "");
+          setIdPhotoFront(null);
+          setIdPhotoBack(null);
         }}
       >
         <DialogContent
