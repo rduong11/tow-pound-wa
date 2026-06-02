@@ -1,15 +1,17 @@
 import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
+import { Button } from "../shadcn/button";
 
-type OwnerSubmissionConfirmationProps = {
+type OwnerStatusResponseProps = {
   status: VehicleStatus;
   denialReason?: string | null;
+  onEdit?: () => void;
 };
 
 export default function OwnerStatusResponse({
   status,
   denialReason,
-}: OwnerSubmissionConfirmationProps) {
-  console.log("status received:", status);
+  onEdit,
+}: OwnerStatusResponseProps) {
   if (status === "denied") {
     return (
       <div className="max-w-md mx-auto text-center pt-10">
@@ -22,6 +24,11 @@ export default function OwnerStatusResponse({
             <p className="text-sm font-medium">Reason:</p>
             <p className="text-sm text-muted-foreground mt-1">{denialReason}</p>
           </div>
+        )}
+        {onEdit && (
+          <Button className="mt-6" onClick={onEdit}>
+            Review & Resubmit
+          </Button>
         )}
       </div>
     );
@@ -39,15 +46,13 @@ export default function OwnerStatusResponse({
     );
   }
 
-  if (status === "in_progress") {
-    return (
-      <div className="max-w-md mx-auto text-center pt-10">
-        <h2 className="text-xl font-semibold">You&apos;re all set!</h2>
-        <p className="text-muted-foreground mt-2">
-          Your information has been submitted. The clerk will review your
-          details shortly.
-        </p>
-      </div>
-    );
-  }
+  return (
+    <div className="max-w-md mx-auto text-center pt-10">
+      <h2 className="text-xl font-semibold">You&apos;re all set!</h2>
+      <p className="text-muted-foreground mt-2">
+        Your information has been submitted. The clerk will review your details
+        shortly.
+      </p>
+    </div>
+  );
 }

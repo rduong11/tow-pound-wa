@@ -5,7 +5,7 @@ import {
   ownerSubmissionFormSchema,
   OwnerSubmissionFormSchema,
 } from "@/utils/schemas/ownerSubmissionForm.schema";
-import { submitOwnerInfo } from "@/utils/actions/ownerForm";
+import { submitOwnerInfo, updateOwnerInfo } from "@/utils/actions/ownerForm";
 import { createClient } from "@/utils/supabase/client";
 import toast from "react-hot-toast";
 import OwnerStatusResponse from "./OwnerStatusResponse";
@@ -14,10 +14,21 @@ import z from "zod";
 import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
 
 type FormErrors = Partial<Record<keyof OwnerSubmissionFormSchema, string>>;
+
+type ExistingSubmission = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  address: string;
+  idPhotoFront: string;
+  idPhotoBack: string;
+} | null;
+
 type OwnerSubmissionFormProps = {
   vehicleId: string;
   status: VehicleStatus;
   denialReason: string | null;
+  existingSubmission: ExistingSubmission;
 };
 
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg"];
@@ -46,16 +57,22 @@ export default function OwnerSubmissionForm({
   vehicleId,
   status,
   denialReason,
+  existingSubmission,
 }: OwnerSubmissionFormProps) {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
+  const [firstName, setFirstName] = useState(
+    existingSubmission?.firstName ?? "",
+  );
+  const [lastName, setLastName] = useState(existingSubmission?.lastName ?? "");
+  const [email, setEmail] = useState(existingSubmission?.email ?? "");
+  const [address, setAddress] = useState(existingSubmission?.address ?? "");
   const [idPhotoFront, setIdPhotoFront] = useState<File | null>(null);
   const [idPhotoBack, setIdPhotoBack] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const isResubmission = status === "denied" && existingSubmission !== null;
 
   const validateField = (
     field: keyof OwnerSubmissionFormSchema,
@@ -123,6 +140,7 @@ export default function OwnerSubmissionForm({
         }));
         return;
       }
+
       setErrors((prev) => ({
         idPhotoFront: prev.idPhotoFront,
         idPhotoBack: prev.idPhotoBack,
@@ -136,15 +154,25 @@ export default function OwnerSubmissionForm({
         return;
       }
 
-      const response = await submitOwnerInfo({
-        firstName,
-        lastName,
-        email,
-        address,
-        idPhotoFront: frontUrl,
-        idPhotoBack: backUrl,
-        vehicleId,
-      });
+      const response = isResubmission
+        ? await updateOwnerInfo({
+            firstName,
+            lastName,
+            email,
+            address,
+            idPhotoFront: frontUrl,
+            idPhotoBack: backUrl,
+            vehicleId,
+          })
+        : await submitOwnerInfo({
+            firstName,
+            lastName,
+            email,
+            address,
+            idPhotoFront: frontUrl,
+            idPhotoBack: backUrl,
+            vehicleId,
+          });
 
       if (response?.error) {
         toast.error(response.error);
@@ -152,6 +180,7 @@ export default function OwnerSubmissionForm({
       }
 
       setSubmitted(true);
+      setIsEditing(false);
     } catch (error) {
       console.error("Something went wrong. Please try again later.", error);
       toast.error("Something went wrong. Please try again later.");
@@ -160,11 +189,19 @@ export default function OwnerSubmissionForm({
     }
   };
 
-  return submitted ||
-    status === "in_progress" ||
-    status === "ready" ||
-    status === "denied" ? (
-    <OwnerStatusResponse status={status} denialReason={denialReason} />
+  const showStatusResponse =
+    !isEditing &&
+    (submitted ||
+      status === "in_progress" ||
+      status === "ready" ||
+      status === "denied");
+
+  return showStatusResponse ? (
+    <OwnerStatusResponse
+      status={submitted ? "in_progress" : status}
+      denialReason={denialReason}
+      onEdit={status === "denied" ? () => setIsEditing(true) : undefined}
+    />
   ) : (
     <OwnerFormFields
       firstName={firstName}
