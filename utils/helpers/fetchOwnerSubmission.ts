@@ -21,28 +21,39 @@ export async function fetchOwnerSubmissionById(vehicleId: string) {
 export async function getSignedUrls(
   frontPath: string,
   backPath: string,
-  proofPath: string,
+  proofPath: string | null,
 ) {
   const supabase = await createClient();
 
-  const [frontResult, backResult, proofResult] = await Promise.all([
+  const basePromises = [
     supabase.storage.from("tow-pound-ids").createSignedUrl(frontPath, 3600),
     supabase.storage.from("tow-pound-ids").createSignedUrl(backPath, 3600),
-    supabase.storage
-      .from("proof-of-ownership")
-      .createSignedUrl(proofPath, 3600),
-  ]);
+  ];
+
+  const [frontResult, backResult] = await Promise.all(basePromises);
+
+  let proofSignedUrl: string | null = null;
+
+  if (proofPath) {
+    const proofResult = await supabase.storage
+      .from("proofOfOwnership")
+      .createSignedUrl(proofPath, 3600);
+
+    if (proofResult.error) {
+      console.log("Error generating proof signed URL", proofResult.error);
+    } else {
+      proofSignedUrl = proofResult.data?.signedUrl ?? null;
+    }
+  }
 
   if (frontResult.error)
     console.log("Error generating front signed URL", frontResult.error);
   if (backResult.error)
     console.log("Error generating back signed URL", backResult.error);
-  if (proofResult.error)
-    console.log("Error generating proof of ownership URL", proofResult.error);
 
   return {
     frontSignedUrl: frontResult.data?.signedUrl ?? null,
     backSignedUrl: backResult.data?.signedUrl ?? null,
-    proofOfOwnershipUrl: proofResult.data?.signedUrl ?? null,
+    proofOfOwnershipUrl: proofSignedUrl,
   };
 }

@@ -28,7 +28,7 @@ type ExistingSubmission = {
   address: string;
   idPhotoFront: string;
   idPhotoBack: string;
-  proofOfOwnership: string;
+  proofOfOwnership: string | null;
 } | null;
 
 type OwnerSubmissionFormProps = {
@@ -63,7 +63,8 @@ const uploadPhoto = async (
 
 const uploadProof = async (file: File, vehicleId: string) => {
   const supabase = createClient();
-  const fileName = `${vehicleId}/-${Date.now()}`;
+  const extension = file.name.split(".").pop();
+  const fileName = `${vehicleId}/-${Date.now()}.${extension}`;
 
   const { data, error } = await supabase.storage
     .from("proofOfOwnership")
@@ -161,7 +162,7 @@ export default function OwnerSubmissionForm({
       const allErrors: FormErrors = {};
 
       const textResult = ownerSubmissionFormSchema
-        .omit({ idPhotoFront: true, idPhotoBack: true })
+        .omit({ idPhotoFront: true, idPhotoBack: true, proofOfOwnership: true })
         .safeParse({ firstName, lastName, email, address });
 
       if (!textResult.success) {
@@ -211,7 +212,7 @@ export default function OwnerSubmissionForm({
             address,
             idPhotoFront: frontUrl!,
             idPhotoBack: backUrl!,
-            proofOfOwnership: proofUrl!,
+            proofOfOwnership: proofUrl ?? undefined,
             vehicleId,
           })
         : await submitOwnerInfo({
@@ -221,7 +222,7 @@ export default function OwnerSubmissionForm({
             address,
             idPhotoFront: frontUrl!,
             idPhotoBack: backUrl!,
-            proofOfOwnership: proofUrl!,
+            proofOfOwnership: proofUrl ?? undefined,
             vehicleId,
           });
 
@@ -316,6 +317,7 @@ export default function OwnerSubmissionForm({
             onSubmit={handleOwnerSubmission}
             existingPhotoFront={existingSubmission?.idPhotoFront}
             existingPhotoBack={existingSubmission?.idPhotoBack}
+            proofOfOwnership={existingSubmission?.proofOfOwnership ?? undefined}
           />
         </DialogContent>
       </Dialog>

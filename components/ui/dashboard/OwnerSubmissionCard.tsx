@@ -93,16 +93,33 @@ export default async function OwnerSubmissionCard({
         <Separator />
         <div className="flex flex-col gap-2">
           <span className="text-muted-foreground">Proof of Ownership</span>
-          {proofOfOwnershipUrl ? (
-            <Image
-              src={proofOfOwnershipUrl}
-              alt="Back ID"
-              width={500}
-              height={300}
-              className="w-full rounded-md"
-            />
+          {ownerInfo.proofOfOwnership ? (
+            proofOfOwnershipUrl ? (
+              ownerInfo.proofOfOwnership.endsWith(".pdf") ? (
+                <a
+                  href={proofOfOwnershipUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline text-sm"
+                >
+                  View Proof of Ownership (PDF)
+                </a>
+              ) : (
+                <Image
+                  src={proofOfOwnershipUrl}
+                  alt="Proof of Ownership"
+                  width={500}
+                  height={300}
+                  className="w-full rounded-md"
+                />
+              )
+            ) : (
+              <p className="text-xs text-red-500">Failed to load proof.</p>
+            )
           ) : (
-            <p className="text-xs text-red-500">Failed to load photo.</p>
+            <p className="text-xs text-muted-foreground">
+              No proof of ownership submitted.
+            </p>
           )}
         </div>
       </CardContent>

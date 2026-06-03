@@ -183,7 +183,7 @@ export default function OwnerFormFields({
             </FieldLabel>
             {proofOfOwnership && (
               <p className="text-xs text-muted-foreground mb-1">
-                Previous photo on file. Upload a new one to replace it.
+                Previous proof on file. Upload a new one to replace it.
               </p>
             )}
             <Input

@@ -16,8 +16,15 @@ export async function submitOwnerInfo(
     return { error: result.error.issues[0].message };
   }
 
-  const { firstName, lastName, email, address, idPhotoFront, idPhotoBack } =
-    result.data;
+  const {
+    firstName,
+    lastName,
+    email,
+    address,
+    idPhotoFront,
+    proofOfOwnership,
+    idPhotoBack,
+  } = result.data;
 
   const { error } = await supabase.from("owner_submissions").insert({
     firstName,
@@ -26,6 +33,7 @@ export async function submitOwnerInfo(
     address,
     idPhotoFront,
     idPhotoBack,
+    proofOfOwnership: proofOfOwnership ?? null,
     vehicle_id: data.vehicleId,
   });
 
@@ -57,8 +65,15 @@ export async function updateOwnerInfo(
     return { error: result.error.issues[0].message };
   }
 
-  const { firstName, lastName, email, address, idPhotoFront, idPhotoBack } =
-    result.data;
+  const {
+    firstName,
+    lastName,
+    email,
+    address,
+    idPhotoFront,
+    idPhotoBack,
+    proofOfOwnership,
+  } = result.data;
 
   const { data: updatedRows, error } = await supabase
     .from("owner_submissions")
@@ -69,6 +84,7 @@ export async function updateOwnerInfo(
       address,
       idPhotoFront,
       idPhotoBack,
+      proofOfOwnership: proofOfOwnership ?? null,
     })
     .eq("vehicle_id", data.vehicleId)
     .select();
