@@ -28,6 +28,7 @@ type ExistingSubmission = {
   address: string;
   idPhotoFront: string;
   idPhotoBack: string;
+  proofOfOwnership: string;
 } | null;
 
 type OwnerSubmissionFormProps = {
@@ -39,6 +40,7 @@ type OwnerSubmissionFormProps = {
 
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const ACCEPTED_PROOF_TYPES = ["image/jpeg", "image/jpg", "application/pdf"];
 
 const uploadPhoto = async (
   file: File,
@@ -50,6 +52,21 @@ const uploadPhoto = async (
 
   const { data, error } = await supabase.storage
     .from("tow-pound-ids")
+    .upload(fileName, file);
+
+  if (error) {
+    return null;
+  }
+
+  return data.path;
+};
+
+const uploadProof = async (file: File, vehicleId: string) => {
+  const supabase = createClient();
+  const fileName = `${vehicleId}/-${Date.now()}`;
+
+  const { data, error } = await supabase.storage
+    .from("proofOfOwnership")
     .upload(fileName, file);
 
   if (error) {
@@ -73,6 +90,7 @@ export default function OwnerSubmissionForm({
   const [address, setAddress] = useState(existingSubmission?.address ?? "");
   const [idPhotoFront, setIdPhotoFront] = useState<File | null>(null);
   const [idPhotoBack, setIdPhotoBack] = useState<File | null>(null);
+  const [proof, setProof] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
@@ -98,6 +116,27 @@ export default function OwnerSubmissionForm({
       setErrors((prev) => ({
         ...prev,
         [field]: "Only JPG and JPEG files are accepted",
+      }));
+      return false;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "File size must be under 5MB",
+      }));
+      return false;
+    }
+
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
+    return true;
+  };
+
+  const validateProof = (file: File, field: "proofOfOwnership") => {
+    if (!ACCEPTED_PROOF_TYPES.includes(file.type)) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "Only JPG, JPEG, and PDF files are accepted",
       }));
       return false;
     }
@@ -141,6 +180,10 @@ export default function OwnerSubmissionForm({
         ? await uploadPhoto(idPhotoBack, vehicleId, "back")
         : (existingSubmission?.idPhotoBack ?? null);
 
+      const proofUrl = proof
+        ? await uploadProof(proof, vehicleId)
+        : (existingSubmission?.proofOfOwnership ?? null);
+
       if (!frontUrl) allErrors.idPhotoFront = "Front photo is required";
       if (!backUrl) allErrors.idPhotoBack = "Back photo is required";
 
@@ -168,6 +211,7 @@ export default function OwnerSubmissionForm({
             address,
             idPhotoFront: frontUrl!,
             idPhotoBack: backUrl!,
+            proofOfOwnership: proofUrl!,
             vehicleId,
           })
         : await submitOwnerInfo({
@@ -177,6 +221,7 @@ export default function OwnerSubmissionForm({
             address,
             idPhotoFront: frontUrl!,
             idPhotoBack: backUrl!,
+            proofOfOwnership: proofUrl!,
             vehicleId,
           });
 
@@ -223,8 +268,10 @@ export default function OwnerSubmissionForm({
           onAddressChange={setAddress}
           onPhotoFrontChange={setIdPhotoFront}
           onPhotoBackChange={setIdPhotoBack}
+          onProofChange={setProof}
           onValidateField={validateField}
           onValidateIdFile={validateIdFile}
+          onValidateProof={validateProof}
           onSubmit={handleOwnerSubmission}
         />
       )}
@@ -262,8 +309,10 @@ export default function OwnerSubmissionForm({
             onAddressChange={setAddress}
             onPhotoFrontChange={setIdPhotoFront}
             onPhotoBackChange={setIdPhotoBack}
+            onProofChange={setProof}
             onValidateField={validateField}
             onValidateIdFile={validateIdFile}
+            onValidateProof={validateProof}
             onSubmit={handleOwnerSubmission}
             existingPhotoFront={existingSubmission?.idPhotoFront}
             existingPhotoBack={existingSubmission?.idPhotoBack}

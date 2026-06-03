@@ -27,6 +27,7 @@ export const ownerSubmissionFormSchema = z.object({
     }),
   idPhotoFront: z.string().min(1, { message: "Front photo is required" }),
   idPhotoBack: z.string().min(1, { message: "Back photo is required" }),
+  proofOfOwnership: z.string().optional(),
 });
 
 export type OwnerSubmissionFormSchema = z.infer<

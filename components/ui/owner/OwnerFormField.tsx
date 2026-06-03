@@ -19,17 +19,23 @@ type OwnerFormFieldsProps = {
   loading: boolean;
   existingPhotoFront?: string;
   existingPhotoBack?: string;
+  proofOfOwnership?: string;
   onFirstNameChange: (value: string) => void;
   onLastNameChange: (value: string) => void;
   onEmailChange: (value: string) => void;
   onAddressChange: (value: string) => void;
   onPhotoFrontChange: (file: File) => void;
   onPhotoBackChange: (file: File) => void;
+  onProofChange: (file: File) => void;
   onValidateField: (
     field: keyof OwnerSubmissionFormSchema,
     value: string,
   ) => void;
-  onValidateIdFile: (file: File, field: "idPhotoFront" | "idPhotoBack") => void;
+  onValidateIdFile: (
+    file: File,
+    field: "idPhotoFront" | "idPhotoBack",
+  ) => boolean;
+  onValidateProof: (file: File, field: "proofOfOwnership") => boolean;
   onSubmit: (e: React.SubmitEvent) => void;
 };
 
@@ -42,14 +48,17 @@ export default function OwnerFormFields({
   loading,
   existingPhotoFront,
   existingPhotoBack,
+  proofOfOwnership,
   onFirstNameChange,
   onLastNameChange,
   onEmailChange,
   onAddressChange,
   onPhotoFrontChange,
   onPhotoBackChange,
+  onProofChange,
   onValidateField,
   onValidateIdFile,
+  onValidateProof,
   onSubmit,
 }: OwnerFormFieldsProps) {
   return (
@@ -169,6 +178,29 @@ export default function OwnerFormFields({
               <p className="text-xs text-red-500">{errors.idPhotoBack}</p>
             )}
             <FieldDescription>JPG or JPEG only.</FieldDescription>
+            <FieldLabel htmlFor="proof-of-ownership">
+              Proof of Ownership (optional)
+            </FieldLabel>
+            {proofOfOwnership && (
+              <p className="text-xs text-muted-foreground mb-1">
+                Previous photo on file. Upload a new one to replace it.
+              </p>
+            )}
+            <Input
+              id="proof-of-ownership"
+              type="file"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  onProofChange(file);
+                  onValidateProof(file, "proofOfOwnership");
+                }
+              }}
+            />
+            {errors.proofOfOwnership && (
+              <p className="text-xs text-red-500">{errors.proofOfOwnership}</p>
+            )}
+            <FieldDescription>JPG, JPEG, or PDF only.</FieldDescription>
           </Field>
         </FieldGroup>
         <Button
