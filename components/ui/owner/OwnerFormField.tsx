@@ -201,6 +201,10 @@ export default function OwnerFormFields({
               <p className="text-xs text-red-500">{errors.proofOfOwnership}</p>
             )}
             <FieldDescription>JPG, JPEG, or PDF only.</FieldDescription>
+            <span className="text-destructive text-xs">
+              Submitting with no proof of ownership means you will have to pay
+              with cash, in person.
+            </span>
           </Field>
         </FieldGroup>
         <Button

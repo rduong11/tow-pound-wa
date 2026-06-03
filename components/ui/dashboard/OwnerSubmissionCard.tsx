@@ -25,10 +25,12 @@ export default async function OwnerSubmissionCard({
 
   const ownerInfo = response.data;
 
-  const { frontSignedUrl, backSignedUrl } = await getSignedUrls(
-    ownerInfo.idPhotoFront,
-    ownerInfo.idPhotoBack
-  );
+  const { frontSignedUrl, backSignedUrl, proofOfOwnershipUrl } =
+    await getSignedUrls(
+      ownerInfo.idPhotoFront,
+      ownerInfo.idPhotoBack,
+      ownerInfo.proofOfOwnership,
+    );
 
   return (
     <div>
@@ -79,6 +81,21 @@ export default async function OwnerSubmissionCard({
           {backSignedUrl ? (
             <Image
               src={backSignedUrl}
+              alt="Back ID"
+              width={500}
+              height={300}
+              className="w-full rounded-md"
+            />
+          ) : (
+            <p className="text-xs text-red-500">Failed to load photo.</p>
+          )}
+        </div>
+        <Separator />
+        <div className="flex flex-col gap-2">
+          <span className="text-muted-foreground">Proof of Ownership</span>
+          {proofOfOwnershipUrl ? (
+            <Image
+              src={proofOfOwnershipUrl}
               alt="Back ID"
               width={500}
               height={300}
