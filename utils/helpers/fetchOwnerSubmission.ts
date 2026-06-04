@@ -5,7 +5,7 @@ export async function fetchOwnerSubmissionById(vehicleId: string) {
   const { data, error } = await supabase
     .from("owner_submissions")
     .select(
-      "firstName, lastName, address, idPhotoFront, idPhotoBack, proofOfOwnership, email, created_at, vehicle_id",
+      "firstName, lastName, address, idPhotoFront, idPhotoBack, proofOfOwnership, proofStatus, email, created_at, vehicle_id"
     )
     .eq("vehicle_id", vehicleId)
     .maybeSingle();
@@ -21,7 +21,7 @@ export async function fetchOwnerSubmissionById(vehicleId: string) {
 export async function getSignedUrls(
   frontPath: string,
   backPath: string,
-  proofPath: string | null,
+  proofPath: string | null
 ) {
   const supabase = await createClient();
 

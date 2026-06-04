@@ -30,6 +30,14 @@ export const ownerSubmissionFormSchema = z.object({
   proofOfOwnership: z.string().optional(),
 });
 
+export const proofStatuSchema = z.enum([
+  "null",
+  "pending",
+  "approved",
+  "denied",
+]);
+
+export type ProofStatus = z.infer<typeof proofStatuSchema>;
 export type OwnerSubmissionFormSchema = z.infer<
   typeof ownerSubmissionFormSchema
 >;

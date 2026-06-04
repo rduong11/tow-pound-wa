@@ -5,6 +5,8 @@ import {
   fetchOwnerSubmissionById,
   getSignedUrls,
 } from "@/utils/helpers/fetchOwnerSubmission";
+import ProofActionButtons from "./ProofActionButtons";
+import Link from "next/link";
 
 export default async function OwnerSubmissionCard({
   vehicleId,
@@ -29,7 +31,7 @@ export default async function OwnerSubmissionCard({
     await getSignedUrls(
       ownerInfo.idPhotoFront,
       ownerInfo.idPhotoBack,
-      ownerInfo.proofOfOwnership,
+      ownerInfo.proofOfOwnership
     );
 
   return (
@@ -91,19 +93,27 @@ export default async function OwnerSubmissionCard({
           )}
         </div>
         <Separator />
-        <div className="flex flex-col gap-2">
-          <span className="text-muted-foreground">Proof of Ownership</span>
+        <div className="rounded-lg border p-4 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground font-medium">
+              Proof of Ownership
+            </span>
+            <ProofActionButtons
+              vehicleId={vehicleId}
+              proofStatus={ownerInfo.proofStatus}
+            />
+          </div>
           {ownerInfo.proofOfOwnership ? (
             proofOfOwnershipUrl ? (
               ownerInfo.proofOfOwnership.endsWith(".pdf") ? (
-                <a
+                <Link
                   href={proofOfOwnershipUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-500 underline text-sm"
                 >
                   View Proof of Ownership (PDF)
-                </a>
+                </Link>
               ) : (
                 <Image
                   src={proofOfOwnershipUrl}

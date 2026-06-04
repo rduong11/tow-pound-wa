@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import {
   ownerSubmissionFormSchema,
   OwnerSubmissionFormSchema,
@@ -7,7 +8,7 @@ import {
 import { createClient } from "../supabase/server";
 
 export async function submitOwnerInfo(
-  data: OwnerSubmissionFormSchema & { vehicleId: string },
+  data: OwnerSubmissionFormSchema & { vehicleId: string }
 ) {
   const supabase = await createClient();
   const result = ownerSubmissionFormSchema.safeParse(data);
@@ -34,6 +35,7 @@ export async function submitOwnerInfo(
     idPhotoFront,
     idPhotoBack,
     proofOfOwnership: proofOfOwnership ?? null,
+    proofStatus: proofOfOwnership ? "pending" : null,
     vehicle_id: data.vehicleId,
   });
 
@@ -56,7 +58,7 @@ export async function submitOwnerInfo(
 }
 
 export async function updateOwnerInfo(
-  data: OwnerSubmissionFormSchema & { vehicleId: string },
+  data: OwnerSubmissionFormSchema & { vehicleId: string }
 ) {
   const supabase = await createClient();
   const result = ownerSubmissionFormSchema.safeParse(data);
@@ -85,6 +87,7 @@ export async function updateOwnerInfo(
       idPhotoFront,
       idPhotoBack,
       proofOfOwnership: proofOfOwnership ?? null,
+      proofStatus: proofOfOwnership ? "pending" : null,
     })
     .eq("vehicle_id", data.vehicleId)
     .select();
@@ -103,5 +106,25 @@ export async function updateOwnerInfo(
     return { error: statusError.message };
   }
 
+  return { error: null };
+}
+
+export async function updateProofStatus(
+  vehicleId: string,
+  status: "approved" | "denied"
+) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("owner_submissions")
+    .update({ proofStatus: status })
+    .eq("vehicle_id", vehicleId);
+
+  if (error) {
+    console.log("Error updating proof status", error);
+    return { error: error.message };
+  }
+
+  revalidatePath("/dashboard");
+  revalidatePath(`/dashboard/vehicles/${vehicleId}`);
   return { error: null };
 }

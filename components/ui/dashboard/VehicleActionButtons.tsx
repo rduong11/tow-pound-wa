@@ -1,4 +1,4 @@
-"use client"; // 1. Flag this explicitly as a client component
+"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
