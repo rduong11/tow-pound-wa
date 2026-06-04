@@ -1,5 +1,6 @@
 import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
 import { Button } from "../shadcn/button";
+import PaymentPage from "./PaymentPage";
 
 type OwnerStatusResponseProps = {
   status: VehicleStatus;
@@ -35,15 +36,7 @@ export default function OwnerStatusResponse({
   }
 
   if (status === "ready") {
-    return (
-      <div className="max-w-md mx-auto text-center pt-10">
-        <h2 className="text-xl font-semibold">Your vehicle is ready!</h2>
-        <p className="text-muted-foreground mt-2">
-          Your submission has been approved. Please proceed to payment.
-        </p>
-        {/* Payment component goes here */}
-      </div>
-    );
+    return <PaymentPage />;
   }
 
   return (
