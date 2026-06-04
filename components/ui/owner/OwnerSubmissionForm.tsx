@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   ownerSubmissionFormSchema,
   OwnerSubmissionFormSchema,
+  ProofStatus,
 } from "@/utils/schemas/ownerSubmissionForm.schema";
 import { submitOwnerInfo, updateOwnerInfo } from "@/utils/actions/ownerForm";
 import { createClient } from "@/utils/supabase/client";
@@ -18,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../shadcn/dialog";
+import { PoundLocation } from "@/utils/constants/poundLocations";
 
 type FormErrors = Partial<Record<keyof OwnerSubmissionFormSchema, string>>;
 
@@ -36,6 +38,8 @@ type OwnerSubmissionFormProps = {
   status: VehicleStatus;
   denialReason: string | null;
   existingSubmission: ExistingSubmission;
+  location: PoundLocation;
+  proofStatus: ProofStatus;
 };
 
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg"];
@@ -45,7 +49,7 @@ const ACCEPTED_PROOF_TYPES = ["image/jpeg", "image/jpg", "application/pdf"];
 const uploadPhoto = async (
   file: File,
   vehicleId: string,
-  side: "front" | "back",
+  side: "front" | "back"
 ) => {
   const supabase = createClient();
   const fileName = `${vehicleId}/${side}-${Date.now()}`;
@@ -82,9 +86,11 @@ export default function OwnerSubmissionForm({
   status,
   denialReason,
   existingSubmission,
+  location,
+  proofStatus,
 }: OwnerSubmissionFormProps) {
   const [firstName, setFirstName] = useState(
-    existingSubmission?.firstName ?? "",
+    existingSubmission?.firstName ?? ""
   );
   const [lastName, setLastName] = useState(existingSubmission?.lastName ?? "");
   const [email, setEmail] = useState(existingSubmission?.email ?? "");
@@ -101,7 +107,7 @@ export default function OwnerSubmissionForm({
 
   const validateField = (
     field: keyof OwnerSubmissionFormSchema,
-    value: string,
+    value: string
   ) => {
     const result = ownerSubmissionFormSchema.shape[field].safeParse(value);
     if (result.success) {
@@ -111,7 +117,7 @@ export default function OwnerSubmissionForm({
 
   const validateIdFile = (
     file: File,
-    field: "idPhotoFront" | "idPhotoBack",
+    field: "idPhotoFront" | "idPhotoBack"
   ) => {
     if (!ACCEPTED_FILE_TYPES.includes(file.type)) {
       setErrors((prev) => ({
@@ -175,15 +181,15 @@ export default function OwnerSubmissionForm({
 
       const frontUrl = idPhotoFront
         ? await uploadPhoto(idPhotoFront, vehicleId, "front")
-        : (existingSubmission?.idPhotoFront ?? null);
+        : existingSubmission?.idPhotoFront ?? null;
 
       const backUrl = idPhotoBack
         ? await uploadPhoto(idPhotoBack, vehicleId, "back")
-        : (existingSubmission?.idPhotoBack ?? null);
+        : existingSubmission?.idPhotoBack ?? null;
 
       const proofUrl = proof
         ? await uploadProof(proof, vehicleId)
-        : (existingSubmission?.proofOfOwnership ?? null);
+        : existingSubmission?.proofOfOwnership ?? null;
 
       if (!frontUrl) allErrors.idPhotoFront = "Front photo is required";
       if (!backUrl) allErrors.idPhotoBack = "Back photo is required";
@@ -254,6 +260,8 @@ export default function OwnerSubmissionForm({
           status={submitted ? "in_progress" : status}
           denialReason={denialReason}
           onEdit={status === "denied" ? () => setEditOpen(true) : undefined}
+          location={location}
+          proofStatus={proofStatus}
         />
       ) : (
         <OwnerFormFields

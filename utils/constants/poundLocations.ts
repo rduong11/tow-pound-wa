@@ -4,3 +4,5 @@ export const TOW_POUND_LOCATIONS = [
   "10301 S Doty Ave",
   "701 N Sacramento Blvd",
 ] as const;
+
+export type PoundLocation = (typeof TOW_POUND_LOCATIONS)[number];
