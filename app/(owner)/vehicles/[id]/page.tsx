@@ -2,6 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import OwnerSubmissionForm from "@/components/ui/owner/OwnerSubmissionForm";
 import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
 import { fetchOwnerSubmissionById } from "@/utils/helpers/fetchOwnerSubmission";
+import { PoundLocation } from "@/utils/constants/poundLocations";
 
 async function fetchVehicleDetails(id: string) {
   const supabase = await createClient();
@@ -16,7 +17,12 @@ async function fetchVehicleDetails(id: string) {
     return { error: error.message };
   }
 
-  return { data: data as typeof data & { status: VehicleStatus } };
+  return {
+    data: data as typeof data & {
+      status: VehicleStatus;
+      location: PoundLocation;
+    },
+  };
 }
 
 export default async function OwnerVehicleFormPage({

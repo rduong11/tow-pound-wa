@@ -10,7 +10,7 @@ export default function CashPaymentPage({ location }: CashPaymentPageProps) {
     <div className="max-w-md mx-auto text-center pt-10">
       <h2 className="text-xl font-semibold">
         Your vehicle is ready for pickup at:
-        <div className="border border-gray-300 rounded-lg p-4 m-4 bg-gray-300">
+        <div className="border border-gray-300 rounded-lg p-4 m-4">
           {location}
         </div>
       </h2>

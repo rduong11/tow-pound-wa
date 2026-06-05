@@ -9,6 +9,8 @@ type OwnerStatusResponseProps = {
   denialReason?: string | null;
   location: PoundLocation;
   proofStatus: ProofStatus;
+  vehicleId: string;
+  email: string;
   onEdit?: () => void;
 };
 
@@ -17,6 +19,8 @@ export default function OwnerStatusResponse({
   denialReason,
   proofStatus,
   onEdit,
+  vehicleId,
+  email,
   location,
 }: OwnerStatusResponseProps) {
   if (status === "denied") {
@@ -42,7 +46,14 @@ export default function OwnerStatusResponse({
   }
 
   if (status === "ready") {
-    return <PaymentPage location={location} proofStatus={proofStatus} />;
+    return (
+      <PaymentPage
+        vehicleId={vehicleId}
+        email={email}
+        location={location}
+        proofStatus={proofStatus}
+      />
+    );
   }
 
   return (
