@@ -12,7 +12,9 @@ async function fetchVehicleById(id: string) {
 
   const { data, error } = await supabase
     .from("vehicles")
-    .select("id, plateNumber, make, model, color, status, year, location")
+    .select(
+      "id, plateNumber, make, model, color, status, year, location, pickupCode",
+    )
     .eq("id", id)
     .single();
 
@@ -39,6 +41,8 @@ export default async function VehicleDetailPage({
   const vehicle = response.data;
 
   const ownerSubmission = await fetchOwnerSubmissionById(id);
+  const { firstName, lastName, idPhotoFront, idPhotoBack } =
+    ownerSubmission?.data ?? {};
   const hasSubmission = !!ownerSubmission?.data;
 
   return (
