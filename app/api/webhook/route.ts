@@ -40,24 +40,15 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = createAdminClient();
-    console.log(
-      "service role key exists:",
-      !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-    );
-
     const pickupCode = generatePickupCode();
-    console.log("pickup code generated:", pickupCode);
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("vehicles")
       .update({
-        status: "picked_up",
+        status: "paid",
         pickupCode,
       })
       .eq("id", vehicleId);
-
-    console.log("update data:", data);
-    console.log("update error:", error);
 
     if (error) {
       console.error("Error updating vehicle after payment", error);
