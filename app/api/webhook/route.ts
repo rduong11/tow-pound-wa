@@ -1,12 +1,13 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
+import { createAdminClient } from "@/utils/supabase/admin";
 
 const stripe = new Stripe(process.env.NEXT_PUBLIC_SECRET_STRIPE_KEY!);
 
 function generatePickupCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let code = "TW-";
+  let code = "";
   for (let i = 0; i < 6; i++) {
     code += chars[Math.floor(Math.random() * chars.length)];
   }
@@ -38,16 +39,25 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No vehicle ID" }, { status: 400 });
     }
 
-    const supabase = await createClient();
-    const pickupCode = generatePickupCode();
+    const supabase = createAdminClient();
+    console.log(
+      "service role key exists:",
+      !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+    );
 
-    const { error } = await supabase
+    const pickupCode = generatePickupCode();
+    console.log("pickup code generated:", pickupCode);
+
+    const { data, error } = await supabase
       .from("vehicles")
       .update({
         status: "picked_up",
         pickupCode,
       })
       .eq("id", vehicleId);
+
+    console.log("update data:", data);
+    console.log("update error:", error);
 
     if (error) {
       console.error("Error updating vehicle after payment", error);
