@@ -14,6 +14,7 @@ type VehicleCardProps = {
   color: string;
   status: VehicleStatus;
   year: number;
+  pickupCode: string;
 };
 
 export default function VehicleCard({
@@ -24,6 +25,7 @@ export default function VehicleCard({
   color,
   status,
   year,
+  pickupCode,
 }: VehicleCardProps) {
   return (
     <Link href={`/dashboard/vehicles/${id}`}>
@@ -42,6 +44,14 @@ export default function VehicleCard({
               className={`h-2 rounded-full ${statusConfig[status ?? "pending"].color} ${statusConfig[status ?? "pending"].width}`}
             />
           </div>
+          {pickupCode && (
+            <p>
+              Pick-up code is:{" "}
+              <span className="font-bold tracking-widest mt-2">
+                {pickupCode}
+              </span>
+            </p>
+          )}
         </Card>
       </div>
     </Link>

@@ -7,7 +7,6 @@ export const statusSchema = z.enum([
   "denied",
   "ready",
   "paid",
-  "picked_up",
   "completed",
 ]);
 
@@ -21,7 +20,6 @@ export const statusLabels: Record<VehicleStatus, string> = {
   denied: "Denied",
   ready: "Ready",
   paid: "Paid",
-  picked_up: "Picked Up",
   completed: "Completed",
 };
 
@@ -30,11 +28,10 @@ export const statusConfig: Record<
   { color: string; width: string }
 > = {
   pending: { color: "bg-yellow-400", width: "w-1/6" },
-  in_progress: { color: "bg-yellow-400", width: "w-2/6" },
-  denied: { color: "bg-red-400", width: "w-1/6" },
-  ready: { color: "bg-blue-400", width: "w-3/6" },
-  paid: { color: "bg-green-400", width: "w-4/6" },
-  picked_up: { color: "bg-teal-400", width: "w-5/6" },
+  in_progress: { color: "bg-yellow-400", width: "w-1/3" },
+  denied: { color: "bg-red-400", width: "w-1/2" },
+  ready: { color: "bg-blue-400", width: "w-2/3" },
+  paid: { color: "bg-green-400", width: "w-5/6" },
   completed: { color: "bg-gray-400", width: "w-full" },
 };
 

@@ -12,9 +12,7 @@ async function fetchVehicleById(id: string) {
 
   const { data, error } = await supabase
     .from("vehicles")
-    .select(
-      "id, plateNumber, make, model, color, status, year, location, pickupCode",
-    )
+    .select("id, plateNumber, make, model, color, status, year, location")
     .eq("id", id)
     .single();
 
@@ -41,11 +39,10 @@ export default async function VehicleDetailPage({
   const vehicle = response.data;
 
   const ownerSubmission = await fetchOwnerSubmissionById(id);
-  const { firstName, lastName, idPhotoFront, idPhotoBack } =
-    ownerSubmission?.data ?? {};
   const hasSubmission = !!ownerSubmission?.data;
 
   return (
+    // wait let's just render the pickup code into the actual card, instead of creeating a whole nother component lol
     <div className="p-6">
       <BackButton />
       <Card className="w-full">

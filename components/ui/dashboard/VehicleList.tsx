@@ -5,7 +5,7 @@ async function fetchVehicles() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("vehicles")
-    .select("id, plateNumber, make, model, color, status, year")
+    .select("id, plateNumber, make, model, color, status, year, pickupCode")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -39,6 +39,7 @@ export default async function VehicleList() {
           color={vehicle.color}
           status={vehicle.status}
           year={vehicle.year}
+          pickupCode={vehicle.pickupCode}
         />
       ))}
     </div>
