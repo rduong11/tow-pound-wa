@@ -2,21 +2,27 @@ import { createClient } from "@/utils/supabase/server";
 import OwnerSubmissionForm from "@/components/ui/owner/OwnerSubmissionForm";
 import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
 import { fetchOwnerSubmissionById } from "@/utils/helpers/fetchOwnerSubmission";
+import { PoundLocation } from "@/utils/constants/poundLocations";
 
-async function fetchVehicleStatus(id: string) {
+async function fetchVehicleDetails(id: string) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("vehicles")
-    .select("status, denialReason")
+    .select("status, denialReason, location")
     .eq("id", id)
     .single();
 
   if (error) {
-    console.log("Error fetching vehicle status", error);
+    console.log("Error fetching vehicle details", error);
     return { error: error.message };
   }
 
-  return { data: data as typeof data & { status: VehicleStatus } };
+  return {
+    data: data as typeof data & {
+      status: VehicleStatus;
+      location: PoundLocation;
+    },
+  };
 }
 
 export default async function OwnerVehicleFormPage({
@@ -27,7 +33,7 @@ export default async function OwnerVehicleFormPage({
   const { id } = await params;
 
   const [vehicleResponse, submissionResponse] = await Promise.all([
-    fetchVehicleStatus(id),
+    fetchVehicleDetails(id),
     fetchOwnerSubmissionById(id),
   ]);
 
@@ -35,8 +41,9 @@ export default async function OwnerVehicleFormPage({
     return <p className="text-red-500">Vehicle not found.</p>;
   }
 
-  const { status, denialReason } = vehicleResponse.data;
+  const { status, denialReason, location } = vehicleResponse.data;
   const existingSubmission = submissionResponse.data ?? null;
+  const proofStatus = existingSubmission?.proofStatus;
 
   return (
     <div>
@@ -45,6 +52,8 @@ export default async function OwnerVehicleFormPage({
         status={status}
         denialReason={denialReason}
         existingSubmission={existingSubmission}
+        location={location}
+        proofStatus={proofStatus}
       />
     </div>
   );

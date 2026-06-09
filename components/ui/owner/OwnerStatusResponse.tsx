@@ -1,17 +1,27 @@
 import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
 import { Button } from "../shadcn/button";
 import PaymentPage from "./PaymentPage";
+import { PoundLocation } from "@/utils/constants/poundLocations";
+import { ProofStatus } from "@/utils/schemas/ownerSubmissionForm.schema";
 
 type OwnerStatusResponseProps = {
   status: VehicleStatus;
   denialReason?: string | null;
+  location: PoundLocation;
+  proofStatus: ProofStatus;
+  vehicleId: string;
+  email: string;
   onEdit?: () => void;
 };
 
 export default function OwnerStatusResponse({
   status,
   denialReason,
+  proofStatus,
   onEdit,
+  vehicleId,
+  email,
+  location,
 }: OwnerStatusResponseProps) {
   if (status === "denied") {
     return (
@@ -36,7 +46,14 @@ export default function OwnerStatusResponse({
   }
 
   if (status === "ready") {
-    return <PaymentPage />;
+    return (
+      <PaymentPage
+        vehicleId={vehicleId}
+        email={email}
+        location={location}
+        proofStatus={proofStatus}
+      />
+    );
   }
 
   return (

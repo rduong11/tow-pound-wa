@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   ownerSubmissionFormSchema,
   OwnerSubmissionFormSchema,
+  ProofStatus,
 } from "@/utils/schemas/ownerSubmissionForm.schema";
 import { submitOwnerInfo, updateOwnerInfo } from "@/utils/actions/ownerForm";
 import { createClient } from "@/utils/supabase/client";
@@ -18,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../shadcn/dialog";
+import { PoundLocation } from "@/utils/constants/poundLocations";
 
 type FormErrors = Partial<Record<keyof OwnerSubmissionFormSchema, string>>;
 
@@ -36,6 +38,8 @@ type OwnerSubmissionFormProps = {
   status: VehicleStatus;
   denialReason: string | null;
   existingSubmission: ExistingSubmission;
+  location: PoundLocation;
+  proofStatus: ProofStatus;
 };
 
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg"];
@@ -82,6 +86,8 @@ export default function OwnerSubmissionForm({
   status,
   denialReason,
   existingSubmission,
+  location,
+  proofStatus,
 }: OwnerSubmissionFormProps) {
   const [firstName, setFirstName] = useState(
     existingSubmission?.firstName ?? "",
@@ -254,6 +260,10 @@ export default function OwnerSubmissionForm({
           status={submitted ? "in_progress" : status}
           denialReason={denialReason}
           onEdit={status === "denied" ? () => setEditOpen(true) : undefined}
+          location={location}
+          proofStatus={proofStatus}
+          email={email}
+          vehicleId={vehicleId}
         />
       ) : (
         <OwnerFormFields
