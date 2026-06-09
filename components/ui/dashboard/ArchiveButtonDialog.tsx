@@ -14,6 +14,7 @@ import {
 } from "../shadcn/dialog";
 import { archiveVehicle } from "@/utils/actions/archiveVehicle";
 import toast from "react-hot-toast";
+import { Spinner } from "../shadcn/spinner";
 
 type ArchiveButtonDialogProps = {
   vehicleId: string;
@@ -63,7 +64,7 @@ export default function ArchiveButtonDialog({
               disabled={loading}
               className="hover:brightness-75 transition-all duration-200"
             >
-              {loading ? "Archiving..." : "Confirm"}
+              {loading ? <Spinner /> : "Confirm"}
             </Button>
           </DialogFooter>
         </form>

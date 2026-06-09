@@ -19,6 +19,7 @@ import { approveVehicle, denyVehicle } from "@/utils/actions/vehicleActions";
 import { VehicleStatus, statusLabels } from "@/utils/schemas/vehicle.schema";
 import toast from "react-hot-toast";
 import { Textarea } from "../shadcn/textarea";
+import { Spinner } from "../shadcn/spinner";
 
 type VehicleActionButtonsProps = {
   vehicleId: string;
@@ -134,7 +135,7 @@ export default function VehicleActionButtons({
               onClick={handleDeny}
               disabled={loading}
             >
-              {loading ? "Denying..." : "Confirm Deny"}
+              {loading ? <Spinner /> : "Confirm Deny"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -147,7 +148,7 @@ export default function VehicleActionButtons({
         onClick={handleApprove}
         disabled={!hasSubmission ? disableButton : loading}
       >
-        {loading ? "Approving..." : "Approve"}
+        {loading ? <Spinner /> : "Approve"}
       </Button>
     </div>
   );

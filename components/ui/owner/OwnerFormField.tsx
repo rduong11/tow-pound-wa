@@ -7,6 +7,7 @@ import {
 import { Input } from "../shadcn/input";
 import { Button } from "../shadcn/button";
 import { OwnerSubmissionFormSchema } from "@/utils/schemas/ownerSubmissionForm.schema";
+import { Spinner } from "../shadcn/spinner";
 
 type FormErrors = Partial<Record<keyof OwnerSubmissionFormSchema, string>>;
 
@@ -29,11 +30,11 @@ type OwnerFormFieldsProps = {
   onProofChange: (file: File) => void;
   onValidateField: (
     field: keyof OwnerSubmissionFormSchema,
-    value: string,
+    value: string
   ) => void;
   onValidateIdFile: (
     file: File,
-    field: "idPhotoFront" | "idPhotoBack",
+    field: "idPhotoFront" | "idPhotoBack"
   ) => boolean;
   onValidateProof: (file: File, field: "proofOfOwnership") => boolean;
   onSubmit: (e: React.SubmitEvent) => void;
@@ -212,7 +213,7 @@ export default function OwnerFormFields({
           disabled={loading}
           className="hover:brightness-75 transition-all duration-200"
         >
-          {loading ? "Submitting..." : "Submit"}
+          {loading ? <Spinner /> : "Submit"}
         </Button>
       </form>
     </div>

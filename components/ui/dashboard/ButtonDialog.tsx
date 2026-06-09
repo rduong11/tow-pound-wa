@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "../shadcn/select";
 import z from "zod";
+import { Spinner } from "../shadcn/spinner";
 
 type Location = (typeof TOW_POUND_LOCATIONS)[number];
 type Color = (typeof VEHICLE_COLORS)[number];
@@ -289,7 +290,7 @@ export default function ButtonDialog() {
                 disabled={loading}
                 className="hover:brightness-75 transition-all duration-200"
               >
-                {loading ? "Saving..." : "Save changes"}
+                {loading ? <Spinner /> : "Save changes"}
               </Button>
             </DialogFooter>
           </form>

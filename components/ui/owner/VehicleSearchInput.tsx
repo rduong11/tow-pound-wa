@@ -7,6 +7,7 @@ import { Input } from "../shadcn/input";
 import { plateSchema } from "@/utils/schemas/vehicleForm.schema";
 import { searchVehicle } from "@/utils/actions/vehicleSearch";
 import { ButtonGroup } from "../shadcn/button-group";
+import { Spinner } from "../shadcn/spinner";
 
 export default function VehicleSearchInput() {
   const [plateNumber, setPlateNumber] = useState("");
@@ -61,7 +62,7 @@ export default function VehicleSearchInput() {
             }}
           />
           <Button onClick={handleSearch} disabled={loading}>
-            {loading ? "Searching..." : "Search"}
+            {loading ? <Spinner /> : "Search"}
           </Button>
         </ButtonGroup>
       </Field>

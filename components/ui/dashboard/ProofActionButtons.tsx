@@ -6,6 +6,7 @@ import { updateProofStatus } from "@/utils/actions/ownerForm";
 import { ProofStatus } from "@/utils/schemas/ownerSubmissionForm.schema";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { Spinner } from "../shadcn/spinner";
 
 type ProofActionButtonsProps = {
   vehicleId: string;
@@ -48,7 +49,7 @@ export default function ProofActionButtons({
         disabled={loadingStatus !== null}
         onClick={() => handleProofStatus("denied")}
       >
-        {loadingStatus === "denied" ? "Denying..." : "Deny Proof"}
+        {loadingStatus === "denied" ? <Spinner /> : "Deny Proof"}
       </Button>
       <Button
         size="sm"
@@ -56,7 +57,7 @@ export default function ProofActionButtons({
         disabled={loadingStatus !== null}
         onClick={() => handleProofStatus("approved")}
       >
-        {loadingStatus === "approved" ? "Approving..." : "Approve Proof"}
+        {loadingStatus === "approved" ? <Spinner /> : "Approve Proof"}
       </Button>
     </div>
   );

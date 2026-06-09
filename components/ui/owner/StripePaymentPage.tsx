@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "../shadcn/button";
 import { createCheckoutSession } from "@/utils/actions/stripeActions";
 import toast from "react-hot-toast";
+import { Spinner } from "../shadcn/spinner";
 
 type StripePaymentPageProps = {
   vehicleId: string;
@@ -50,7 +51,7 @@ export default function StripePaymentPage({
         onClick={handlePayment}
         disabled={loading}
       >
-        {loading ? "Redirecting..." : "Pay Now"}
+        {loading ? <Spinner /> : "Pay Now"}
       </Button>
     </div>
   );

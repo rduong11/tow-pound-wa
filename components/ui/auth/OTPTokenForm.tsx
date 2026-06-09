@@ -52,7 +52,7 @@ export default function OTPTokenForm({
                 disabled={loading}
                 className="hover:bg-chart-2 hover:text-primary-foreground transition-colors duration-200"
               >
-                <Spinner>{loading ? <Spinner /> : "Verify"}</Spinner>
+                {loading ? <Spinner /> : "Verify"}
               </Button>
             </Field>
           </FieldGroup>
