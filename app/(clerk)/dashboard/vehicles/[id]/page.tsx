@@ -42,6 +42,7 @@ export default async function VehicleDetailPage({
   const hasSubmission = !!ownerSubmission?.data;
 
   return (
+    // wait let's just render the pickup code into the actual card, instead of creeating a whole nother component lol
     <div className="p-6">
       <BackButton />
       <Card className="w-full">
