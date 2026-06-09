@@ -62,8 +62,8 @@ export default function VehicleCard({
                     {pickupCode}
                   </span>
                 </p>
+                <ArchiveButtonDialog />
               </div>
-              <ArchiveButtonDialog />
             </div>
           )}
         </Card>
