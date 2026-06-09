@@ -1,3 +1,5 @@
+"use server";
+
 import { revalidatePath } from "next/cache";
 import { createClient } from "../supabase/server";
 
@@ -6,7 +8,7 @@ export async function archiveVehicle(vehicleId: string) {
 
   const { error } = await supabase
     .from("vehicles")
-    .update({ status: "completed" }) // <- add archivedAt
+    .update({ status: "completed", archivedAt: new Date().toISOString() })
     .eq("id", vehicleId);
 
   if (error) {

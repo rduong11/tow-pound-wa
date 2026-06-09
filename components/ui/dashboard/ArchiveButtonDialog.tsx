@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "../shadcn/dialog";
 import { archiveVehicle } from "@/utils/actions/archiveVehicle";
+import toast from "react-hot-toast";
 
 type ArchiveButtonDialogProps = {
   vehicleId: string;
@@ -21,11 +22,20 @@ type ArchiveButtonDialogProps = {
 export default function ArchiveButtonDialog({
   vehicleId,
 }: ArchiveButtonDialogProps) {
-  const handleArchive = () => {
+  const handleArchive = async () => {
     try {
       setLoading(true);
-      // const response = archiveVehicle(vehicleId);
-    } catch (error) {}
+      const response = await archiveVehicle(vehicleId);
+      if (response?.error) {
+        toast.error(response.error);
+        return;
+      }
+    } catch (error) {
+      console.error("Something went wrong.", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
   const [loading, setLoading] = useState(false);
   return (
@@ -36,7 +46,7 @@ export default function ArchiveButtonDialog({
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
-        <form>
+        <form onSubmit={handleArchive}>
           <DialogHeader>
             <DialogTitle>Archive Vehicle</DialogTitle>
             <DialogDescription className="pb-4">
