@@ -12,13 +12,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../shadcn/dialog";
+import { archiveVehicle } from "@/utils/actions/archiveVehicle";
 
-export default function ArchiveButtonDialog() {
+type ArchiveButtonDialogProps = {
+  vehicleId: string;
+};
+
+export default function ArchiveButtonDialog({
+  vehicleId,
+}: ArchiveButtonDialogProps) {
+  const handleArchive = () => {
+    try {
+      setLoading(true);
+      // const response = archiveVehicle(vehicleId);
+    } catch (error) {}
+  };
   const [loading, setLoading] = useState(false);
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="fixed bottom-6 right-6 text-lg px-6 py-6 shadow-lg hover:bg-chart-2 hover:text-primary-foreground transition-colors duration-200">
+        <Button className="px-4 py-4 shadow-lg hover:bg-chart-2 hover:text-primary-foreground transition-colors duration-200">
           Archive Vehicle
         </Button>
       </DialogTrigger>
@@ -26,7 +39,7 @@ export default function ArchiveButtonDialog() {
         <form>
           <DialogHeader>
             <DialogTitle>Archive Vehicle</DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="pb-4">
               Are you sure you want to archive this vehicle? You will not see it
               again upon clicking confirm.
             </DialogDescription>
