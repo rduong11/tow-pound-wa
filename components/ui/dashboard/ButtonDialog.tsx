@@ -70,7 +70,7 @@ export default function ButtonDialog() {
 
   const validateField = (
     field: keyof VehicleFormData,
-    value: string | number
+    value: string | number,
   ) => {
     const result = vehicleSchema.shape[field].safeParse(value);
     if (result.success) {
@@ -160,7 +160,7 @@ export default function ButtonDialog() {
                       setPlateNumber(e.target.value.toUpperCase());
                       validateField(
                         "plateNumber",
-                        e.target.value.toUpperCase()
+                        e.target.value.toUpperCase(),
                       );
                     }}
                   />
