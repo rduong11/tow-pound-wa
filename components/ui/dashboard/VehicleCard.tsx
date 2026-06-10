@@ -17,7 +17,7 @@ type VehicleCardProps = {
   color: string;
   status: VehicleStatus;
   year: number;
-  pickupCode: string;
+  pickupCode: string | null;
 };
 
 export default function VehicleCard({
@@ -60,7 +60,9 @@ export default function VehicleCard({
 
         <div className="w-full bg-gray-200 h-2 rounded-full">
           <div
-            className={`h-2 rounded-full ${statusConfig[status ?? "pending"].color} ${statusConfig[status ?? "pending"].width}`}
+            className={`h-2 rounded-full ${
+              statusConfig[status ?? "pending"].color
+            } ${statusConfig[status ?? "pending"].width}`}
           />
         </div>
 

@@ -6,6 +6,7 @@ async function fetchVehicles() {
   const { data, error } = await supabase
     .from("vehicles")
     .select("id, plateNumber, make, model, color, status, year, pickupCode")
+    .is("archivedAt", null)
     .order("created_at", { ascending: false });
 
   if (error) {
