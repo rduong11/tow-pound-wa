@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Roboto } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "react-hot-toast";
 
-const roboto = Roboto({ subsets: ["latin"], variable: "--font-sans" });
+import { Big_Shoulders } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const bigShoulders = Big_Shoulders({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-big-shoulders",
 });
 
 export const metadata: Metadata = {
@@ -27,17 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={cn(
-        "h-full",
-        "antialiased",
-        geistSans.variable,
-        geistMono.variable,
-        "font-sans",
-        roboto.variable
-      )}
-    >
+    <html lang="en" className={bigShoulders.className}>
       <body className="min-h-full flex flex-col">
         {children}
         <Toaster />
