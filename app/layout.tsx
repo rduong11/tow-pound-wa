@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 import { Toaster } from "react-hot-toast";
 
 import { Big_Shoulders } from "next/font/google";
 
 const bigShoulders = Big_Shoulders({
   subsets: ["latin"],
-  weight: ["400", "700"],
   variable: "--font-big-shoulders",
+  fallback: ["Arial", "sans-serif"],
 });
 
 export const metadata: Metadata = {

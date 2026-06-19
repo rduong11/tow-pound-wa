@@ -46,27 +46,35 @@ export default function VehicleSearchInput() {
   }
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="w-full max-w-2xl mx-auto px-4">
       <Field>
-        <FieldLabel htmlFor="vehicle-search-input">
+        <FieldLabel
+          htmlFor="vehicle-search-input"
+          className="text-lg font-medium mb-2 block"
+        >
           Enter your vehicle plate number
         </FieldLabel>
         <ButtonGroup>
           <Input
             value={plateNumber}
             placeholder="AB12345"
+            className="h-12 text-lg px-4 placeholder:text-lg"
             onChange={(e) => {
               const val = e.target.value.toUpperCase();
               setPlateNumber(val);
               setError(validatePlate(val));
             }}
           />
-          <Button onClick={handleSearch} disabled={loading}>
+          <Button
+            onClick={handleSearch}
+            disabled={loading}
+            className="h-12 px-8 text-lg"
+          >
             {loading ? <Spinner /> : "Search"}
           </Button>
         </ButtonGroup>
       </Field>
-      <p className="text-xs text-red-500 h-4">{error}</p>
+      <p className="text-xs text-red-500 h-4 mt-1">{error}</p>
     </div>
   );
 }
