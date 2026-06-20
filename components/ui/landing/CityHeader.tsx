@@ -21,7 +21,7 @@ export default function CityHeader({ variant }: CityHeaderProps) {
           height={isSlim ? 32 : 40}
         />
         <span
-          className={`font-bigShoulders font-bold text-[#194A8D] tracking-wide ${
+          className={`font-big-shoulders font-bold text-[#194A8D] tracking-wide ${
             isSlim ? "text-lg" : "text-2xl"
           }`}
         >

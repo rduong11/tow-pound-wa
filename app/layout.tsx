@@ -2,11 +2,18 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
-import { Big_Shoulders } from "next/font/google";
+import { Roboto, Big_Shoulders } from "next/font/google";
 
 const bigShoulders = Big_Shoulders({
   subsets: ["latin"],
   variable: "--font-big-shoulders",
+  fallback: ["Arial", "sans-serif"],
+});
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  variable: "--font-roboto",
   fallback: ["Arial", "sans-serif"],
 });
 
@@ -21,8 +28,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={bigShoulders.className}>
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className={`${bigShoulders.variable} ${roboto.variable}`}>
+      <body className="font-roboto min-h-full flex flex-col">
         {children}
         <Toaster />
       </body>

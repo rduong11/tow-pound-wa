@@ -46,35 +46,45 @@ export default function VehicleSearchInput() {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto px-4">
-      <Field>
-        <FieldLabel
-          htmlFor="vehicle-search-input"
-          className="text-lg font-medium mb-2 block"
-        >
-          Enter your vehicle plate number
-        </FieldLabel>
-        <ButtonGroup>
-          <Input
-            value={plateNumber}
-            placeholder="AB12345"
-            className="h-12 text-lg px-4 placeholder:text-lg"
-            onChange={(e) => {
-              const val = e.target.value.toUpperCase();
-              setPlateNumber(val);
-              setError(validatePlate(val));
-            }}
-          />
-          <Button
-            onClick={handleSearch}
-            disabled={loading}
-            className="h-12 px-8 text-lg"
+    <div className="w-full">
+      <div className="flex items-center bg-white rounded-lg overflow-hidden shadow-lg">
+        <span className="pl-4 text-gray-400">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
           >
-            {loading ? <Spinner /> : "Search"}
-          </Button>
-        </ButtonGroup>
-      </Field>
-      <p className="text-xs text-red-500 h-4 mt-1">{error}</p>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"
+            />
+          </svg>
+        </span>
+        <Input
+          value={plateNumber}
+          placeholder="Enter Illinois License Plate"
+          className="h-14 text-lg px-4 border-none shadow-none focus-visible:ring-0 flex-1"
+          onChange={(e) => {
+            const val = e.target.value.toUpperCase();
+            setPlateNumber(val);
+          }}
+        />
+        <Button
+          onClick={handleSearch}
+          disabled={loading}
+          className="h-10 px-6 text-base rounded-none rounded-r-lg bg-[#ED2127] hover:brightness-75 my-2 mr-2 rounded-l-lg"
+        >
+          {loading ? <Spinner /> : "Search"}
+        </Button>
+      </div>
+      {error && (
+        <p className="text-red-300 text-sm mt-2 text-center">{error}</p>
+      )}
     </div>
   );
 }
