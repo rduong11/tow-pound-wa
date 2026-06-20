@@ -1,7 +1,7 @@
 import CityHeader from "@/components/ui/landing/CityHeader";
 import Hero from "@/components/ui/landing/Hero";
 import HowItWorks from "@/components/ui/landing/HowItWorks";
-import VehicleSearchInput from "@/components/ui/owner/VehicleSearchInput";
+import ImportantNotice from "@/components/ui/landing/ImportantNotice";
 
 export default function LandingPage() {
   return (
@@ -9,6 +9,7 @@ export default function LandingPage() {
       <CityHeader variant="full" />
       <Hero />
       <HowItWorks />
+      <ImportantNotice />
     </div>
   );
 }
