@@ -3,6 +3,7 @@ import { Button } from "../shadcn/button";
 import PaymentPage from "./PaymentPage";
 import { PoundLocation } from "@/utils/constants/poundLocations";
 import { ProofStatus } from "@/utils/schemas/ownerSubmissionForm.schema";
+import ProgressBar from "./ProgressBar";
 
 type OwnerStatusResponseProps = {
   status: VehicleStatus;
