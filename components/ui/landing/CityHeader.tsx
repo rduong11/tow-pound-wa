@@ -9,7 +9,7 @@ export default function CityHeader({ variant }: CityHeaderProps) {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full bg-white border-b-2 border-[#ED2127] flex items-center justify-center ${
+      className={`sticky top-0 z-50 w-full bg-white border-b-2 flex items-center justify-center ${
         isSlim ? "py-2" : "py-3"
       }`}
     >

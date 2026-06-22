@@ -2,11 +2,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "../shadcn/button";
-import { Field, FieldLabel } from "../shadcn/field";
 import { Input } from "../shadcn/input";
 import { plateSchema } from "@/utils/schemas/vehicleForm.schema";
 import { searchVehicle } from "@/utils/actions/vehicleSearch";
-import { ButtonGroup } from "../shadcn/button-group";
 import { Spinner } from "../shadcn/spinner";
 
 export default function VehicleSearchInput() {

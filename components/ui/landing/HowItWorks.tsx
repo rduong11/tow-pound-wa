@@ -22,7 +22,7 @@ export default function HowItWorks() {
 
   return (
     <section className="w-full bg-white py-16 px-4">
-      <div className="w-screen h-0.5 bg-[#ED2127] mb-16 -mx-4" />
+      <div className="h-0.5 bg-[#ED2127] mb-16 -mx-4" />
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col items-center mb-12">
           <h2 className="font-big-shoulders text-4xl font-bold text-[#194A8D]">
