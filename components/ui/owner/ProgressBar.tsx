@@ -1,11 +1,13 @@
 import { OWNER_STEPS } from "@/utils/constants/ownerSteps";
+import { statusMetaData, VehicleStatus } from "@/utils/schemas/vehicle.schema";
 
 type ProgressBarProps = {
-  currentStep: number;
+  status: VehicleStatus;
 };
 
-export default function ProgressBar({ currentStep }: ProgressBarProps) {
+export default function ProgressBar({ status }: ProgressBarProps) {
   const totalSteps = OWNER_STEPS.length;
+  const currentStep = statusMetaData[status].step;
 
   return (
     <div className="w-full px-8 py-4">

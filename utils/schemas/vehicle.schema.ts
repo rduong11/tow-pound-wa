@@ -14,26 +14,33 @@ export const fullVehicleSchema = vehicleSchema.extend({
   status: statusSchema,
 });
 
-export const statusLabels: Record<VehicleStatus, string> = {
-  pending: "Pending",
-  in_progress: "In Progress",
-  denied: "Denied",
-  ready: "Ready",
-  paid: "Paid",
-  completed: "Completed",
-};
-
-export const statusConfig: Record<
+export const statusMetaData: Record<
   VehicleStatus,
-  { color: string; width: string }
+  { label: string; color: string; width: string; step: number }
 > = {
-  pending: { color: "bg-yellow-400", width: "w-1/6" },
-  in_progress: { color: "bg-yellow-400", width: "w-1/3" },
-  denied: { color: "bg-red-400", width: "w-1/2" },
-  ready: { color: "bg-blue-400", width: "w-2/3" },
-  paid: { color: "bg-green-400", width: "w-5/6" },
-  completed: { color: "bg-gray-400", width: "w-full" },
+  pending: {
+    label: "Pending",
+    color: "bg-yellow-400",
+    width: "w-1/6",
+    step: 1,
+  },
+  in_progress: {
+    label: "In Progress",
+    color: "bg-yellow-400",
+    width: "w-1/3",
+    step: 2,
+  },
+  denied: { label: "Denied", color: "bg-red-400", width: "w-1/2", step: 1 },
+  ready: { label: "Ready", color: "bg-blue-400", width: "w-2/3", step: 3 },
+  paid: { label: "Paid", color: "bg-green-400", width: "w-5/6", step: 4 },
+  completed: {
+    label: "Completed",
+    color: "bg-gray-400",
+    width: "w-full",
+    step: 4,
+  },
 };
 
 export type VehicleStatus = z.infer<typeof statusSchema>;
 export type FullVehicleData = z.infer<typeof fullVehicleSchema>;
+export type StatusMetaDataType = z.infer<typeof statusMetaData>;

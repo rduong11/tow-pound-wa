@@ -16,7 +16,7 @@ import {
 import { Label } from "@/components/ui/shadcn/label";
 import { Badge } from "@/components/ui/shadcn/badge";
 import { approveVehicle, denyVehicle } from "@/utils/actions/vehicleActions";
-import { VehicleStatus, statusLabels } from "@/utils/schemas/vehicle.schema";
+import { VehicleStatus, statusMetaData } from "@/utils/schemas/vehicle.schema";
 import toast from "react-hot-toast";
 import { Textarea } from "../shadcn/textarea";
 import { Spinner } from "../shadcn/spinner";
@@ -141,7 +141,7 @@ export default function VehicleActionButtons({
         </DialogContent>
       </Dialog>
 
-      <Badge>{statusLabels[status]}</Badge>
+      <Badge>{statusMetaData[status].label}</Badge>
 
       <Button
         className="bg-green-600 hover:brightness-75 transition-all duration-200"

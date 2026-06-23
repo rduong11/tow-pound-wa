@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  VehicleStatus,
-  statusLabels,
-  statusConfig,
-} from "@/utils/schemas/vehicle.schema";
+import { VehicleStatus, statusMetaData } from "@/utils/schemas/vehicle.schema";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "../shadcn/card";
 import ArchiveButtonDialog from "./ArchiveButtonDialog";
@@ -50,7 +46,7 @@ export default function VehicleCard({
         <div>
           <CardHeader className="p-0">
             <CardTitle className="text-xl font-bold">
-              {plateNumber} - {statusLabels[status ?? "pending"]}
+              {plateNumber} - {statusMetaData[status ?? "pending"].label}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0 mt-2 text-gray-600">
@@ -61,8 +57,8 @@ export default function VehicleCard({
         <div className="w-full bg-gray-200 h-2 rounded-full">
           <div
             className={`h-2 rounded-full ${
-              statusConfig[status ?? "pending"].color
-            } ${statusConfig[status ?? "pending"].width}`}
+              statusMetaData[status ?? "pending"].color
+            } ${statusMetaData[status ?? "pending"].width}`}
           />
         </div>
 

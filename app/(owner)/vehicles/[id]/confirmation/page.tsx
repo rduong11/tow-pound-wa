@@ -1,10 +1,11 @@
+import ProgressBar from "@/components/ui/owner/ProgressBar";
 import { createClient } from "@/utils/supabase/server";
 
-async function fetchPickupCode(vehicleId: string) {
+async function fetchPickupCodeAndStatus(vehicleId: string) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("vehicles")
-    .select("pickupCode, location, plateNumber")
+    .select("pickupCode, location, plateNumber, status")
     .eq("id", vehicleId)
     .single();
 
@@ -22,16 +23,17 @@ export default async function ConfirmationPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const response = await fetchPickupCode(id);
+  const response = await fetchPickupCodeAndStatus(id);
 
   if (response?.error || !response.data) {
     return <p className="text-red-500">Something went wrong.</p>;
   }
 
-  const { pickupCode, location, plateNumber } = response.data;
-
+  const { pickupCode, location, plateNumber, status } = response.data;
+  console.log(status);
   return (
     <div className="max-w-md mx-auto text-center pt-10">
+      <ProgressBar status={status} />
       <h2 className="text-xl font-semibold">Payment Successful!</h2>
       <p className="text-muted-foreground mt-2">
         Your vehicle is ready for pickup. Show this code to the clerk.
