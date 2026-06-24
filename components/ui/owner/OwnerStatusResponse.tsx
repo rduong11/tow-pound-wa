@@ -3,6 +3,7 @@ import { Button } from "../shadcn/button";
 import PaymentPage from "./PaymentPage";
 import { PoundLocation } from "@/utils/constants/poundLocations";
 import { ProofStatus } from "@/utils/schemas/ownerSubmissionForm.schema";
+import RefreshButton from "./RefreshButton";
 
 type OwnerStatusResponseProps = {
   status: VehicleStatus;
@@ -62,6 +63,11 @@ export default function OwnerStatusResponse({
       <p className="text-muted-foreground mt-2">
         Your information has been submitted. The clerk will review your details
         shortly.
+      </p>
+      <RefreshButton />
+      <p className="text-xs text-muted-foreground mt-4">
+        If you leave this page open, click this button every couple of 30 mins
+        to check if the clerk has approved your submission.
       </p>
     </div>
   );

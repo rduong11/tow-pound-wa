@@ -17,7 +17,10 @@ export default function ProgressBar({ status }: ProgressBarProps) {
         <div
           className="absolute top-4 left-[10%] h-0.5 bg-[#ED2127] z-0 transition-all duration-500"
           style={{
-            width: `${((currentStep - 1) / (totalSteps - 1)) * 80}%`,
+            width:
+              currentStep >= totalSteps
+                ? "80%"
+                : `${((currentStep - 1) / (totalSteps - 1)) * 80}%`,
           }}
         />
 

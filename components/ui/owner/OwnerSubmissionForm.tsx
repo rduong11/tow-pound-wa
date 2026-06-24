@@ -248,16 +248,16 @@ export default function OwnerSubmissionForm({
   };
 
   const showStatusResponse =
-    submitted ||
     status === "in_progress" ||
     status === "ready" ||
-    status === "denied";
+    status === "denied" ||
+    submitted;
 
   return (
     <>
       {showStatusResponse ? (
         <OwnerStatusResponse
-          status={submitted ? "in_progress" : status}
+          status={status}
           denialReason={denialReason}
           onEdit={status === "denied" ? () => setEditOpen(true) : undefined}
           location={location}
