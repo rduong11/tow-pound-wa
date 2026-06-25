@@ -55,3 +55,15 @@ export async function verifyToken(data: OTPFormData) {
 
   return { error: null, session };
 }
+
+export async function logout() {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.log("Error logging out", error);
+    return { error: error.message };
+  }
+
+  revalidatePath("/dashboard");
+}
