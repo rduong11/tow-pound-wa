@@ -8,6 +8,7 @@ import {
   LoginFormData,
   OTPFormData,
 } from "@/utils/schemas/auth.schema";
+import { redirect } from "next/navigation";
 
 export async function login(data: LoginFormData) {
   const supabase = await createClient();
@@ -65,5 +66,5 @@ export async function logout() {
     return { error: error.message };
   }
 
-  revalidatePath("/dashboard");
+  redirect("/login");
 }
