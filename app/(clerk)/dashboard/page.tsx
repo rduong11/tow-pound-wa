@@ -1,12 +1,11 @@
 import ButtonDialog from "@/components/ui/dashboard/ButtonDialog";
-import LogoutButton from "@/components/ui/dashboard/LogoutButton";
+import DashboardHeader from "@/components/ui/dashboard/DashboardHeader";
 import VehicleList from "@/components/ui/dashboard/VehicleList";
 
 export default function DashboardPage() {
   return (
-    <div className="relative min-h-screen">
-      Dashboard page
-      <LogoutButton />
+    <div className="relative min-h-screen p-6">
+      <DashboardHeader />
       <VehicleList />
       <ButtonDialog />
     </div>
