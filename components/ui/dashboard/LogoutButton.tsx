@@ -5,7 +5,7 @@ import { Button } from "../shadcn/button";
 
 export default function LogoutButton() {
   return (
-    <Button variant="destructive" onClick={() => logout()}>
+    <Button variant="destructive" onClick={async () => await logout()}>
       Log Out
     </Button>
   );
