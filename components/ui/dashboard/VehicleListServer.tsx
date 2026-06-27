@@ -1,5 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
-import VehicleCard from "./VehicleCard";
+import { VehicleStatus } from "@/utils/schemas/vehicle.schema";
+import VehicleListClient from "./VehicleListClient";
+import EmptyState from "./EmptyState";
 
 async function fetchVehicles() {
   const supabase = await createClient();
@@ -17,7 +19,7 @@ async function fetchVehicles() {
   return { data };
 }
 
-export default async function VehicleList() {
+export default async function VehicleListServer() {
   const response = await fetchVehicles();
 
   if (response?.error) {
@@ -25,24 +27,16 @@ export default async function VehicleList() {
   }
 
   if (!response.data || response.data.length === 0) {
-    return <p>No vehicles on record.</p>;
+    return <EmptyState />;
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
-      {response.data.map((vehicle) => (
-        <VehicleCard
-          key={vehicle.id}
-          id={vehicle.id}
-          plateNumber={vehicle.plateNumber}
-          make={vehicle.make}
-          model={vehicle.model}
-          color={vehicle.color}
-          status={vehicle.status}
-          year={vehicle.year}
-          pickupCode={vehicle.pickupCode}
-        />
-      ))}
-    </div>
+    <VehicleListClient
+      vehicles={
+        response.data as ((typeof response.data)[0] & {
+          status: VehicleStatus;
+        })[]
+      }
+    />
   );
 }

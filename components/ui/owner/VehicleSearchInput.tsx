@@ -6,6 +6,7 @@ import { Input } from "../shadcn/input";
 import { plateSchema } from "@/utils/schemas/vehicleForm.schema";
 import { searchVehicle } from "@/utils/actions/vehicleSearch";
 import { Spinner } from "../shadcn/spinner";
+import { Search } from "lucide-react";
 
 export default function VehicleSearchInput() {
   const [plateNumber, setPlateNumber] = useState("");
@@ -46,23 +47,7 @@ export default function VehicleSearchInput() {
   return (
     <div className="w-full">
       <div className="flex items-center bg-white rounded-lg overflow-hidden shadow-lg">
-        <span className="pl-4 text-gray-400">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"
-            />
-          </svg>
-        </span>
+        <Search size={16} className="text-muted-foreground shrink-0 ml-4" />
         <Input
           value={plateNumber}
           placeholder="Enter Illinois License Plate"
