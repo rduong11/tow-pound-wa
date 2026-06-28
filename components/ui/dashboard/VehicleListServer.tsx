@@ -7,7 +7,9 @@ async function fetchVehicles() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("vehicles")
-    .select("id, plateNumber, make, model, color, status, year, pickupCode")
+    .select(
+      "id, plateNumber, make, model, color, status, year, pickupCode, created_at"
+    )
     .is("archivedAt", null)
     .order("created_at", { ascending: false });
 

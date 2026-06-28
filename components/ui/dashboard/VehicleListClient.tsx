@@ -15,6 +15,7 @@ type Vehicle = {
   status: VehicleStatus;
   year: number;
   pickupCode: string | null;
+  created_at: string;
 };
 
 type VehicleListClientProps = {
@@ -61,6 +62,7 @@ export default function VehicleListClient({
               status={vehicle.status}
               year={vehicle.year}
               pickupCode={vehicle.pickupCode}
+              created_at={vehicle.created_at}
             />
           ))}
         </div>

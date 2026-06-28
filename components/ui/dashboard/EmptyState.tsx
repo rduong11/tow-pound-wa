@@ -7,7 +7,7 @@ export default function EmptyState() {
         <Car size={32} className="text-[#194A8D]" />
       </div>
       <h3 className="text-lg font-semibold text-[#194A8D] mb-1">
-        No vehicles on record
+        No vehicles on record.
       </h3>
       <p className="text-sm text-muted-foreground max-w-xs">
         New entries will appear here once added.
